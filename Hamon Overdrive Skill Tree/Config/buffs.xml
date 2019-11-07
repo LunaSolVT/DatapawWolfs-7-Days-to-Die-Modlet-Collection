@@ -1,0 +1,658 @@
+<configs>
+    <insertAfter xpath="/buffs/buff[@name='buffInjuryKnockdown01']">
+        <buff name="buffHamonBarrage" icon="ui_game_symbol_boxer" icon_color="0,0,130" hidden="false" description_key="buffHamonBarrage01Desc">
+            <stack_type value="replace"/>
+            <duration value="2"/>
+            <display_value value=".hamonBarrageCombo"/><display_value_key value="COMBO: {0}"/>
+            
+            <!-- Hamon Barrage -->
+            <effect_group>
+                <requirement name="ProgressionLevel" progression_name="perkHamonBarrage" operation="GTE" value="1"/>
+                    <!-- Set Hamon Barage speed maximum per progression level -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageMaximum" operation="set" value=".5">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonBarrage" operation="Equals" value="1"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageMaximum" operation="set" value="1">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonBarrage" operation="Equals" value="2"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageMaximum" operation="set" value="1.5">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonBarrage" operation="Equals" value="3"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageMaximum" operation="set" value="2.25">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonBarrage" operation="Equals" value="4"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageMaximum" operation="set" value="3.25">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonBarrage" operation="Equals" value="5"/>
+                    </triggered_effect>
+
+                    <!-- Set Hamon Barage speed increment - maxmimum/5 - which means that it will take 5 strikes to meet the maximum -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageIncrement" operation="set" value="@.hamonBarrageMaximum"/>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageIncrement" operation="divide" value="5"/>                
+
+                    <!-- Increment the Hamon Barrage Speed -->
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonBarrageSpeed" operation="add" value="@.hamonBarrageIncrement"/>
+
+                    <!-- Hard Cap the Hamon Barrage Speed to previously defined Hamon Barrage Maximum -->
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonBarrageSpeed" operation="set" value="@.hamonBarrageMaximum">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageSpeed" operation="GT" value="@.hamonBarrageMaximum"/>
+                    </triggered_effect>
+                    
+                    <!-- DEBUG -->
+                    <triggered_effect trigger="onSelfBuffStack" action="CVarLogValue" cvar=".hamonBarrageSpeed"/>
+
+                    <!-- If buff runs out of time, reset Hamon Barrage Speed -->
+                    <triggered_effect trigger="onSelfBuffFinish" action="ModifyCVar" cvar=".hamonBarrageSpeed" operation="set" value="0"/>
+            </effect_group>
+
+            <!-- Hamon Breath Release Timing -->
+            <effect_group>
+                <requirement name="ProgressionLevel" progression_name="perkHamonBreathReleaseTiming" operation="GTE" value="1"/>
+                    <!-- Set Hamon Breath Release buff resistance maximum per progression level -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBuffResistMaximum" operation="set" value=".1">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonBreathReleaseTiming" operation="Equals" value="1"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBuffResistMaximum" operation="set" value=".2">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonBreathReleaseTiming" operation="Equals" value="2"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBuffResistMaximum" operation="set" value=".3">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonBreathReleaseTiming" operation="Equals" value="3"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBuffResistMaximum" operation="set" value=".5">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonBreathReleaseTiming" operation="Equals" value="4"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBuffResistMaximum" operation="set" value=".75">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonBreathReleaseTiming" operation="Equals" value="5"/>
+                    </triggered_effect>
+
+                    <!-- Set Hamon Barage Release buff resist increment - maxmimum/5 - which means that it will take 5 strikes to meet the maximum -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBuffResistIncrement" operation="set" value="@.hamonBuffResistMaximum"/>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBuffResistIncrement" operation="divide" value="5"/>    
+
+                    <!-- Increment the Hamon Breath Release resistance -->
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonBuffResist" operation="add" value="@.hamonBuffResistIncrement"/>
+
+                    <!-- Hard Cap the Hamon Breath Release resistance to previously defined Hamon Breath Release resistance Maximum -->
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonBuffResist" operation="set" value="@.hamonBuffResistMaximum">
+                        <requirement name="CVarCompare" cvar=".hamonBuffResist" operation="GT" value="@.hamonBuffResistMaximum"/>
+                    </triggered_effect>
+                    
+                    <!-- DEBUG -->
+                    <triggered_effect trigger="onSelfBuffStack" action="CVarLogValue" cvar=".hamonBuffResist"/>
+
+                    <!-- If buff runs out of time, reset Hamon Breath Release resistance -->
+                    <triggered_effect trigger="onSelfBuffFinish" action="ModifyCVar" cvar=".hamonBuffResist" operation="set" value="0"/>
+            </effect_group>
+
+            <!-- Hamon Rapid Breathing Stamina Reduction -->
+            <effect_group>
+                <requirement name="ProgressionLevel" progression_name="perkHamonRapidBreathing" operation="GTE" value="1"/>
+                    <!-- Set Hamon Rapid Breathing stamina usage reduction maximum per progression level -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingMaximum" operation="set" value=".2">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonRapidBreathing" operation="Equals" value="1"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingMaximum" operation="set" value=".35">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonRapidBreathing" operation="Equals" value="2"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingMaximum" operation="set" value=".5">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonRapidBreathing" operation="Equals" value="3"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingMaximum" operation="set" value=".6">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonRapidBreathing" operation="Equals" value="4"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingMaximum" operation="set" value=".75">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonRapidBreathing" operation="Equals" value="5"/>
+                    </triggered_effect>
+
+                    <!-- Set Hamon Rapid Breathing stamina usage increment - maxmimum/5 - which means that it will take 5 strikes to meet the maximum -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingIncrement" operation="set" value="@.hamonRapidBreathingMaximum"/>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingIncrement" operation="divide" value="5"/>    
+
+                    <!-- Increment the Hamon Rapid Breathing stamina usage reduction -->
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonRapidBreathing" operation="add" value="@.hamonRapidBreathingIncrement"/>
+
+                    <!-- Hard Cap the Hamon Rapid Breathing stamina usage reduction to previously defined Hamon Rapid Breathing stamina usage reduction Maximum -->
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonRapidBreathing" operation="set" value="@.hamonRapidBreathingMaximum">
+                        <requirement name="CVarCompare" cvar=".hamonRapidBreathing" operation="GT" value="@.hamonRapidBreathingMaximum"/>
+                    </triggered_effect>
+                    
+                    <!-- DEBUG -->
+                    <triggered_effect trigger="onSelfBuffStack" action="CVarLogValue" cvar=".hamonRapidBreathing"/>
+
+                    <!-- If buff runs out of time, reset Hamon Rapid Breathing stamina usage reduction -->
+                    <triggered_effect trigger="onSelfBuffFinish" action="ModifyCVar" cvar=".hamonRapidBreathing" operation="set" value="0"/>
+            </effect_group>
+
+            <!-- Hamon Rapid Breathing Health Regen -->
+            <effect_group>
+                <requirement name="ProgressionLevel" progression_name="perkHamonRapidBreathing" operation="GTE" value="1"/>
+                    <!-- Set Hamon Rapid Breathing health regen increase maximum per progression level -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegenMaximum" operation="set" value="1">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonRapidBreathing" operation="Equals" value="1"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegenMaximum" operation="set" value="2">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonRapidBreathing" operation="Equals" value="2"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegenMaximum" operation="set" value="3">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonRapidBreathing" operation="Equals" value="3"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegenMaximum" operation="set" value="4">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonRapidBreathing" operation="Equals" value="4"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegenMaximum" operation="set" value="5">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonRapidBreathing" operation="Equals" value="5"/>
+                    </triggered_effect>
+
+                    <!-- Set Hamon Rapid Breathing health regen increment - maxmimum/5 - which means that it will take 5 strikes to meet the maximum -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegenIncrement" operation="set" value="@.hamonRapidBreathingHealthRegenMaximum"/>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegenIncrement" operation="divide" value="5"/>    
+
+                    <!-- Increment the Hamon Rapid Breathing health regen increase -->
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegen" operation="add" value="@.hamonRapidBreathingHealthRegenIncrement"/>
+
+                    <!-- Hard Cap the Hamon Rapid Breathing health regen increase to previously defined Hamon Rapid Breathing health regen increase Maximum -->
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegen" operation="set" value="@.hamonRapidBreathingHealthRegenMaximum">
+                        <requirement name="CVarCompare" cvar=".hamonRapidBreathingHealthRegen" operation="GT" value="@.hamonRapidBreathingHealthRegenMaximum"/>
+                    </triggered_effect>
+                    
+                    <!-- DEBUG -->
+                    <triggered_effect trigger="onSelfBuffStack" action="CVarLogValue" cvar=".hamonRapidBreathingHealthRegen"/>
+
+                    <!-- If buff runs out of time, reset Hamon Rapid Breathing health regen increase -->
+                    <triggered_effect trigger="onSelfBuffFinish" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegen" operation="set" value="0"/>
+            </effect_group>
+
+            <!-- Hamon Zoom Punch Entity Range -->
+            <effect_group>
+                <requirement name="ProgressionLevel" progression_name="perkHamonZoomPunch" operation="GTE" value="1"/>
+                    <!-- Set Hamon Zoom Punch Entity Range maximum per progression level -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchMaximum" operation="set" value=".2">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonZoomPunch" operation="Equals" value="1"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchMaximum" operation="set" value=".4">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonZoomPunch" operation="Equals" value="2"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchMaximum" operation="set" value=".55">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonZoomPunch" operation="Equals" value="3"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchMaximum" operation="set" value=".7">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonZoomPunch" operation="Equals" value="4"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchMaximum" operation="set" value=".8">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonZoomPunch" operation="Equals" value="5"/>
+                    </triggered_effect>
+
+                    <!-- Set Hamon Zoom Punch Entity Range increment - maxmimum/5 - which means that it will take 5 strikes to meet the maximum -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchIncrement" operation="set" value="@.hamonZoomPunchMaximum"/>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchIncrement" operation="divide" value="5"/>    
+
+                    <!-- Increment the Hamon Zoom Punch Entity Range -->
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonZoomPunch" operation="add" value="@.hamonZoomPunchIncrement"/>
+
+                    <!-- Hard Cap the Hamon Zoom Punch Entity Range to previously defined Hamon Zoom Punch Maximum -->
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonZoomPunch" operation="set" value="@.hamonZoomPunchMaximum">
+                        <requirement name="CVarCompare" cvar=".hamonZoomPunch" operation="GT" value="@.hamonZoomPunchMaximum"/>
+                    </triggered_effect>
+                    
+                    <!-- DEBUG -->
+                    <triggered_effect trigger="onSelfBuffStack" action="CVarLogValue" cvar=".hamonZoomPunch"/>
+
+                    <!-- If buff runs out of time, reset Hamon Zoom Punch Entity Range -->
+                    <triggered_effect trigger="onSelfBuffFinish" action="ModifyCVar" cvar=".hamonZoomPunch" operation="set" value="0"/>
+            </effect_group>
+
+            <!-- Hamon Zoom Punch Block Range -->
+            <effect_group>
+                <requirement name="ProgressionLevel" progression_name="perkHamonZoomPunch" operation="GTE" value="1"/>
+                    <!-- Set Hamon Zoom Punch Block Range maximum per progression level -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchBlockMaximum" operation="set" value=".2">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonZoomPunch" operation="Equals" value="1"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchBlockMaximum" operation="set" value=".4">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonZoomPunch" operation="Equals" value="2"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchBlockMaximum" operation="set" value=".55">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonZoomPunch" operation="Equals" value="3"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchBlockMaximum" operation="set" value=".7">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonZoomPunch" operation="Equals" value="4"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchBlockMaximum" operation="set" value=".8">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonZoomPunch" operation="Equals" value="5"/>
+                    </triggered_effect>
+
+                    <!-- Set Hamon Zoom Punch Block Range increment - maxmimum/5 - which means that it will take 5 strikes to meet the maximum -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchBlockIncrement" operation="set" value="@.hamonZoomPunchBlockMaximum"/>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchBlockIncrement" operation="divide" value="5"/>    
+
+                    <!-- Increment the Hamon Zoom Punch Block Range -->
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonZoomPunchBlock" operation="add" value="@.hamonZoomPunchBlockIncrement"/>
+
+                    <!-- Hard Cap the Hamon Zoom Punch Block Range to previously defined Hamon Zoom Punch Maximum -->
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonZoomPunchBlock" operation="set" value="@.hamonZoomPunchBlockMaximum">
+                        <requirement name="CVarCompare" cvar=".hamonZoomPunchBlock" operation="GT" value="@.hamonZoomPunchBlockMaximum"/>
+                    </triggered_effect>
+                    
+                    <!-- DEBUG -->
+                    <triggered_effect trigger="onSelfBuffStack" action="CVarLogValue" cvar=".hamonZoomPunchBlock"/>
+
+                    <!-- If buff runs out of time, reset Hamon Zoom Punch Block Range -->
+                    <triggered_effect trigger="onSelfBuffFinish" action="ModifyCVar" cvar=".hamonZoomPunchBlock" operation="set" value="0"/>
+            </effect_group>
+
+            <!-- Hamon Skill Buff CVar Reset on buff finish or removal - onSelfBuffFinish is redundant for our purposes -->
+            <effect_group>
+                    <!-- Reset Hamon Barrage Speed -->
+                    <triggered_effect trigger="onSelfBuffRemove" action="ModifyCVar" cvar=".hamonBarrageSpeed" operation="set" value="0"/>
+
+                    <!-- Reset Hamon Breath Release resistance -->
+                    <triggered_effect trigger="onSelfBuffRemove" action="ModifyCVar" cvar=".hamonBuffResist" operation="set" value="0"/>
+
+                    <!-- Reset Hamon Rapid Breathing stamina reduction -->
+                    <triggered_effect trigger="onSelfBuffRemove" action="ModifyCVar" cvar=".hamonRapidBreathing" operation="set" value="0"/>
+
+                    <!-- Reset Hamon Rapid Breathing health regeneration -->
+                    <triggered_effect trigger="onSelfBuffRemove" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegen" operation="set" value="0"/>
+
+                    <!-- Reset Hamon Zoom Punch Entity Range -->
+                    <triggered_effect trigger="onSelfBuffRemove" action="ModifyCVar" cvar=".hamonZoomPunch" operation="set" value="0"/>
+
+                    <!-- Reset Hamon Zoom Punch Block Range -->
+                    <triggered_effect trigger="onSelfBuffRemove" action="ModifyCVar" cvar=".hamonZoomPunchBlock" operation="set" value="0"/>
+                    
+                    <!-- Resets buff combo counter -->
+                    <triggered_effect trigger="onSelfBuffRemove" action="AddBuff" buff="buffHamonBarrageComboReset"/>
+                    
+                    <!-- Resets fist current status -->
+                    <triggered_effect trigger="onSelfBuffRemove" action="ModifyCVar" cvar=".hamonBarrageFistCurrent" operation="set" value="-1"/>
+            </effect_group>
+
+            <!-- Hamon Skill Buff CVar Effect Application -->
+            <effect_group>
+                    <!-- Set new AttacksPerMinute modifier to Hamon Barrage Speed -->
+                    <passive_effect name="AttacksPerMinute" operation="perc_add" value="@.hamonBarrageSpeed"/>
+
+                    <!-- Set new BuffResistance modifier to Hamon Breath Release resistance -->
+                    <passive_effect name="BuffResistance" operation="base_add" value="@.hamonBuffResist" tags="buffInjuryStunned01,buffInjuryStunned02"/>
+
+                    <!-- Set new StaminaLoss modifier to Hamon Rapid Breathing resistance -->
+                    <passive_effect name="StaminaLoss" operation="perc_subtract" value="@.hamonRapidBreathing" tags="primary,secondary,jumping,running"/>
+
+                    <!-- Set new HealthChangeOT modifier to Hamon Rapid Breathing health regen -->
+                    <passive_effect name="HealthChangeOT" operation="base_add" value="@.hamonRapidBreathingHealthRegen"/>
+
+                    <!-- Set new MaxRange modifier to Hamon Zoom Punch Entity Range -->
+                    <passive_effect name="MaxRange" operation="base_add" value="@.hamonZoomPunch"/>
+
+                    <!-- Set new BlockRange modifier to Hamon Zoom Punch Block Range -->
+                    <passive_effect name="BlockRange" operation="base_add" value="@.hamonZoomPunchBlock"/>
+
+                    <!-- Increments buff combo counter -->
+                    <triggered_effect trigger="onSelfBuffStack" action="AddBuff" buff="buffHamonBarrageComboIncrement"/>
+            </effect_group>
+
+            <!-- Hamon Buff End Triggers -->
+            <effect_group>
+                <!-- DEBUG -->
+                <triggered_effect trigger="onSelfPrimaryActionRayHit" action="CVarLogValue" cvar=".hamonBarrageCombo"/>
+                <triggered_effect trigger="onSelfSecondaryActionRayHit" action="CVarLogValue" cvar=".hamonBarrageCombo"/>
+            </effect_group>
+        </buff>
+
+        <buff name="buffPerkHamonSunlightYellowOverdrive" icon="ui_game_symbol_hot" hidden="true">
+            <stack_type value="replace"/>
+            <duration value="2"/>
+            <!-- Passive effects - does not require alternating hit check because if wrong hit is performed, there will be no damage bonus -->
+            <effect_group>
+                <!-- Prevents players from switching quickly to one-shot with other weapons -->
+                <requirement name="HoldingItemHasTags" tags="perkHamonSunlightYellowOverdrive"/>
+                <!-- For Overdrive to occur, must be a combo of more than 1 -->
+                <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="1"/>
+                    <!-- Passive effects - Entity Damage -->
+                    <passive_effect name="EntityDamage" operation="base_add" value="20">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="4"/>
+                    </passive_effect>
+                    <passive_effect name="EntityDamage" operation="base_add" value="75">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="9"/>
+                    </passive_effect>
+                    <passive_effect name="EntityDamage" operation="base_add" value="50000">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="10"/>
+                    </passive_effect>
+
+                    <!-- Passive effects - Block Damage -->
+                    <passive_effect name="BlockDamage" operation="base_add" value="10">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="4"/>
+                    </passive_effect>
+                    <passive_effect name="BlockDamage" operation="base_add" value="30">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="9"/>
+                    </passive_effect>
+                    <passive_effect name="BlockDamage" operation="base_add" value="100">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="10"/>
+                    </passive_effect>
+
+                    <passive_effect name="AttacksPerMinute" operation="perc_set" value="1"/>
+                    <passive_effect name="StaminaLoss" operation="perc_add" value="5"/>
+                    <passive_effect name="UseGrazingHits" value="false"/>
+            </effect_group>
+
+            <!-- Triggered actions -->
+            <effect_group>
+                <!-- Prevents players from switching quickly to one-shot with other weapons -->
+                <requirement name="HoldingItemHasTags" tags="perkHamonSunlightYellowOverdrive"/>
+                <!-- Must be used with alternating hit -->
+                <requirement name="CVarCompare" cvar=".hamonBarrageFistPrevious" operation="NotEquals" value="@.hamonBarrageFistCurrent"/>
+                <!-- For Overdrive to occur, must be a combo of more than 1 -->
+                <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="1"/>
+                    <!-- Play Power Attack Grunt only when requirements are met -->
+                    <triggered_effect trigger="onSelfBuffStart" action="PlaySound" sound="player#powerattack"/>
+
+                    <!-- Trigger effects - Primary - Ragdoll -->
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="Ragdoll" target="other" duration="1">
+                        <requirement name="EntityTagCompare" target="other" tags="zombie,animal"/>
+                    </triggered_effect>
+                    <!-- Trigger effects - Primary - Zombie -->
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="50">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="4"/>
+                        <requirement name="EntityTagCompare" target="other" tags="zombie"/>
+                        <requirement name="!EntityTagCompare" target="other" tags="animal"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="250">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="9"/>
+                        <requirement name="EntityTagCompare" target="other" tags="zombie"/>
+                        <requirement name="!EntityTagCompare" target="other" tags="animal"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="1000">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="10"/>
+                        <requirement name="EntityTagCompare" target="other" tags="zombie"/>
+                        <requirement name="!EntityTagCompare" target="other" tags="animal"/>
+                    </triggered_effect>
+                    <!-- Trigger effects - Primary - Animal -->
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="50">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="4"/>
+                        <requirement name="EntityTagCompare" target="other" tags="animal"/>
+                        <requirement name="!EntityTagCompare" target="other" tags="zombie"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="250">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="9"/>
+                        <requirement name="EntityTagCompare" target="other" tags="animal"/>
+                        <requirement name="!EntityTagCompare" target="other" tags="zombie"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="1000">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="10"/>
+                        <requirement name="EntityTagCompare" target="other" tags="animal"/>
+                        <requirement name="!EntityTagCompare" target="other" tags="zombie"/>
+                    </triggered_effect>
+                    <!-- IMPORTANT - this prevents one evaluation so that the physical damage applies before the buff evaluates if hamon > zombie health -->
+                    <!-- This allows us to "ragdoll" the remaining body without destroying it -->
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar=".hamonEvalSkip" operation="set" value="1"/>
+
+                    <!-- Handles the application or particle effects on the entity -->
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="AddBuff" target="other" buff="buffPerkHamonSunlightYellowOverdriveParticle"/>
+
+                    <!-- If player lands attack or misses attack, perform cooldown and combo reset -->
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="AddBuff" buff="buffPerkHamonSunlightYellowOverdriveCooldown"/>
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="AddBuff" buff="buffHamonBarrageComboReset"/>
+                    <triggered_effect trigger="onSelfPrimaryActionRayMiss" action="AddBuff" buff="buffPerkHamonSunlightYellowOverdriveCooldown"/>
+                    <triggered_effect trigger="onSelfPrimaryActionRayMiss" action="AddBuff" buff="buffHamonBarrageComboReset"/>
+
+                    <!-- Trigger effects - Secondary - Ragdoll -->
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="Ragdoll" target="other" duration="1">
+                        <requirement name="EntityTagCompare" target="other" tags="zombie,animal"/>
+                    </triggered_effect>
+                    <!-- Trigger effects - Secondary - Zombie -->
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="50">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="4"/>
+                        <requirement name="EntityTagCompare" target="other" tags="zombie"/>
+                        <requirement name="!EntityTagCompare" target="other" tags="animal"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="250">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="9"/>
+                        <requirement name="EntityTagCompare" target="other" tags="zombie"/>
+                        <requirement name="!EntityTagCompare" target="other" tags="animal"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="1000">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="10"/>
+                        <requirement name="EntityTagCompare" target="other" tags="zombie"/>
+                        <requirement name="!EntityTagCompare" target="other" tags="animal"/>
+                    </triggered_effect>
+                    <!-- Trigger effects - Secondary - Animal -->
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="50">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="4"/>
+                        <requirement name="EntityTagCompare" target="other" tags="animal"/>
+                        <requirement name="!EntityTagCompare" target="other" tags="zombie"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="250">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="9"/>
+                        <requirement name="EntityTagCompare" target="other" tags="animal"/>
+                        <requirement name="!EntityTagCompare" target="other" tags="zombie"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="1000">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="10"/>
+                        <requirement name="EntityTagCompare" target="other" tags="animal"/>
+                        <requirement name="!EntityTagCompare" target="other" tags="zombie"/>
+                    </triggered_effect>
+                    <!-- IMPORTANT - this prevents one evaluation so that the physical damage applies before the buff evaluates if hamon > zombie health -->
+                    <!-- This allows us to "ragdoll" the remaining body without destroying it -->
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar=".hamonEvalSkip" operation="set" value="1"/>
+                    
+                    <!-- Handles the application or particle effects on the entity -->
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="AddBuff" target="other" buff="buffPerkHamonSunlightYellowOverdriveParticle"/>
+
+                    <!-- If player lands attack or misses attack, perform cooldown and combo reset -->
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="AddBuff" buff="buffPerkHamonSunlightYellowOverdriveCooldown"/>
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="AddBuff" buff="buffHamonBarrageComboReset"/>
+                    <triggered_effect trigger="onSelfSecondaryActionRayMiss" action="AddBuff" buff="buffPerkHamonSunlightYellowOverdriveCooldown"/>
+                    <triggered_effect trigger="onSelfSecondaryActionRayMiss" action="AddBuff" buff="buffHamonBarrageComboReset"/>
+            </effect_group>
+
+            <!-- Triggered actions - reset modifiers if perk level = 1 -->
+            <effect_group>
+                <!-- For Overdrive to occur, must be a combo of 1 of greater -->
+                <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="1"/>
+                <!-- Perk level = 1 -->
+                <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="1"/>
+                    <!-- RESET ALL COMBO MODIFIERS -->
+                    <!-- Reset Hamon Barrage Speed -->
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar=".hamonBarrageSpeed" operation="set" value="0"/>
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar=".hamonBarrageSpeed" operation="set" value="0"/>
+
+                    <!-- Reset Hamon Breath Release resistance -->
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar=".hamonBuffResist" operation="set" value="0"/>
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar=".hamonBuffResist" operation="set" value="0"/>
+
+                    <!-- Reset Hamon Rapid Breathing stamina reduction -->
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar=".hamonRapidBreathing" operation="set" value="0"/>
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar=".hamonRapidBreathing" operation="set" value="0"/>
+
+                    <!-- Reset Hamon Rapid Breathing health regeneration -->
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegen" operation="set" value="0"/>
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegen" operation="set" value="0"/>
+
+                    <!-- Reset Hamon Zoom Punch Range -->
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar=".hamonZoomPunch" operation="set" value="0"/>
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar=".hamonZoomPunch" operation="set" value="0"/>
+
+                    <!-- Reset Hamon Zoom Punch Range -->
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar=".hamonZoomPunchBlock" operation="set" value="0"/>
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar=".hamonZoomPunchBlock" operation="set" value="0"/>
+            </effect_group>
+	    </buff>
+
+        <buff name="buffPerkHamonSunlightYellowOverdriveCooldown" description_key="buffPerkHamonSunlightYellowOverdriveCooldownDesc" icon="ui_game_symbol_hot" icon_color="255,255,0" icon_blink="true">
+            <stack_type value="ignore"/>
+            <duration value="0"/>
+            <display_value value="cooldownDurationHSYO"/>
+		    <display_value_key value="CD: {0}s"/>
+            <effect_group>
+                <!-- We want to remove Overdrive only after all damage has been applied by the player - so this buff does just that -->
+                <triggered_effect trigger="onSelfBuffStart" action="RemoveBuff" buff="buffPerkHamonSunlightYellowOverdrive"/>
+                
+                <!-- When buff starts - set duration to value below -->
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="6"/>
+                
+                <!-- Decrement the duration every update (Every 1 second by default) -->
+                <triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="subtract" value="1"/>
+
+                <!-- Also evaluate whether or not the duration is 0 or less and remove the buff in that case -->
+                <triggered_effect trigger="onSelfBuffUpdate" action="RemoveBuff" buff="buffPerkHamonSunlightYellowOverdriveCooldown">
+                    <requirement name="CVarCompare" cvar="cooldownDurationHSYO" operation="LTE" value="0"/>
+                </triggered_effect>
+
+                <!-- Play sound when buff removed (Duration 0 means Finish will never occur) so player knows when they can do it again! -->
+                <triggered_effect trigger="onSelfBuffRemove" action="PlaySound" sound="read_mod" play_in_head="true"/>
+            </effect_group>
+	    </buff>
+
+        <buff name="buffPerkHamonSunlightYellowOverdriveParticle" icon="ui_game_symbol_hot" remove_on_death="false">
+            <stack_type value="replace"/>
+            <duration value="0"/>
+            <effect_group>
+                <!-- When buff starts - set duration to value specified -->
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".cooldownDurationHSYOP" operation="set" value="10"/>
+                <!-- Must use AddPart because you can attach to a given transform and it will move to the correct location on ragdoll -->
+                <triggered_effect trigger="onSelfBuffStart" action="AddPart" part="BodyShockParticle" prefab="ParticleEffects/p_electric_shock" parentTransform="Hips" localPos="0,0,0" localRot="0,0,0"/>
+                
+                <!-- Decrement the duration every update (Every 1 second by default) -->
+                <triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".cooldownDurationHSYOP" operation="subtract" value="1"/>
+
+                <!-- Evaluate if the buff duration is less than 6 seconds and remove the shock particle and attack burning particle if so -->
+                <triggered_effect trigger="onSelfBuffUpdate" action="RemovePart" part="BodyShockParticle">
+                    <requirement name="CVarCompare" cvar=".cooldownDurationHSYOP" operation="LTE" value="9"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfBuffUpdate" action="AddPart" part="BodyShockSmoke" prefab="ParticleEffects/p_campfire" parentTransform="Hips" localPos="0,0,0" localRot="0,0,0">
+                    <requirement name="CVarCompare" cvar=".cooldownDurationHSYOP" operation="LTE" value="9"/>
+                </triggered_effect>
+
+                <!-- Also evaluate whether or not the duration is 0 or less and remove the buff in that case -->
+                <triggered_effect trigger="onSelfBuffUpdate" action="RemovePart" part="BodyShockSmoke">
+                    <requirement name="CVarCompare" cvar=".cooldownDurationHSYOP" operation="LTE" value="0"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfBuffUpdate" action="RemoveBuff" buff="buffPerkHamonSunlightYellowOverdriveParticle">
+                    <requirement name="CVarCompare" cvar=".cooldownDurationHSYOP" operation="LTE" value="0"/>
+                </triggered_effect>
+
+                <!-- On death, remove particle effects - otherwise they linger until the body is destroyed -->
+                <triggered_effect trigger="onSelfDied" action="RemovePart" part="BodyShockParticle"/>
+                <triggered_effect trigger="onSelfDied" action="RemovePart" part="BodyShockSmoke"/>
+            </effect_group>
+	    </buff>
+
+        <buff name="buffHamonBarrageComboReset" icon="ui_game_symbol_run" hidden="true">
+            <stack_type value="ignore"/>
+            <duration value=".01"/>
+            <effect_group>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageCombo" operation="set" value="0"/>
+            </effect_group>
+	    </buff>
+
+        <buff name="buffHamonBarrageComboIncrement" icon="ui_game_symbol_run" hidden="true">
+            <stack_type value="ignore"/>
+            <duration value=".01"/>
+            <effect_group>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageCombo" operation="add" value="1"/>
+            </effect_group>
+	    </buff>
+
+        <buff name="buffHamonTick" icon="ui_game_symbol_run" hidden="true">
+            <stack_type value="replace"/>
+            <duration value="0"/>
+            <update_rate value="1"/>
+            <!-- There are 3 triggers that cause evaluation - update, start, and stack. As a result, each trigger must be utilized -->
+            <effect_group>
+                <requirement name="CVarCompare" cvar="hamon" operation="GT" value="0"/>
+                <requirement name="CVarCompare" cvar=".hamonEvalSkip" operation="Equals" value="0"/>
+                <requirement name="StatCompareCurrent" stat="health" operation="LTE" value="@hamon"/>
+                    <!-- "Kill" entity by setting health to 0 -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyStats" stat="health" operation="set" value="0"/>
+                    <triggered_effect trigger="onSelfBuffUpdate" action="ModifyStats" stat="health" operation="set" value="0"/>
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyStats" stat="health" operation="set" value="0"/>
+            </effect_group>
+            
+            <!-- Effectively skip 1 trigger event when our .hamonEvalSkip CVar is set to 1-->
+            <effect_group>
+                <requirement name="CVarCompare" cvar=".hamonEvalSkip" operation="Equals" value="1"/>
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonEvalSkip" operation="set" value="0"/>
+                    <triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".hamonEvalSkip" operation="set" value="0"/>
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonEvalSkip" operation="set" value="0"/>
+            </effect_group>
+
+            <!-- DEBUG -->
+            <effect_group>
+                <requirement name="CVarCompare" cvar="hamon" operation="GTE" value="0"/>
+                <triggered_effect trigger="onSelfBuffStart" action="CVarLogValue" cvar="hamon"/>
+                <triggered_effect trigger="onSelfBuffUpdate" action="CVarLogValue" cvar="hamon"/>
+                <triggered_effect trigger="onSelfBuffStack" action="CVarLogValue" cvar="hamon"/>
+            </effect_group>
+
+            <!-- This handles the recovery on update that occurs for zombies over time -->
+            <!-- <effect_group>
+                <triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="hamon" operation="subtract" value="5">
+                    <requirement name="CVarCompare" cvar="hamon" operation="GTE" value="0"/>
+                </triggered_effect>
+
+                <triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="hamon" operation="subtract" value="5">
+                    <requirement name="CVarCompare" cvar="hamon" operation="LTE" value="0"/>
+                </triggered_effect>
+            </effect_group> -->
+        </buff>
+
+        <buff name="buffHamonForcedBreathingRecovery" icon="ui_game_symbol_talk" icon_color="199,21,133" icon_blink="true">
+            <stack_type value="ignore"/>
+            <duration value="7"/>
+            <display_value value="time"/> <display_value_key value="FORCED BREATHING"/>
+            <update_rate value="1"/>
+            <effect_group>
+                <passive_effect name="HealthChangeOT" operation="base_add" duration="0,5,7" value="5,10,15"/>
+                <triggered_effect trigger="onSelfBuffFinish" action="AddBuff" buff="buffHamonForcedBreathingRecoveryCooldown"/>
+            </effect_group>
+        </buff>
+
+        <buff name="buffHamonForcedBreathingRecoveryCooldown" description_key="buffHamonForcedBreathingRecoveryDesc" icon="ui_game_symbol_stunned" icon_color="199,21,133" icon_blink="true">
+            <stack_type value="ignore"/>
+            <duration value="10"/>
+            <display_value value="time"/> <display_value_key value="BREATHING RECOVERY"/>
+	    </buff>
+
+        <!-- The buff comes from Hamon Burst and is used as a surrogate to apply to allies of the punched enemy -->
+        <buff name="buffHamonBurstApplicator01" icon="ui_game_symbol_run" hidden="true">
+            <stack_type value="replace"/>
+            <duration value="0.01"/>
+            <effect_group>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" target="selfAOE" target_tags="ally" range="5" cvar="hamon" operation="add" value="2"/>
+            </effect_group>
+        </buff>
+        <buff name="buffHamonBurstApplicator02" icon="ui_game_symbol_run" hidden="true">
+            <stack_type value="replace"/>
+            <duration value="0.01"/>
+            <effect_group>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" target="selfAOE" target_tags="ally" range="5" cvar="hamon" operation="add" value="4"/>
+            </effect_group>
+        </buff>
+        <buff name="buffHamonBurstApplicator03" icon="ui_game_symbol_run" hidden="true">
+            <stack_type value="replace"/>
+            <duration value="0.01"/>
+            <effect_group>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" target="selfAOE" target_tags="ally" range="5" cvar="hamon" operation="add" value="6"/>
+            </effect_group>
+        </buff>
+        <buff name="buffHamonBurstApplicator04" icon="ui_game_symbol_run" hidden="true">
+            <stack_type value="replace"/>
+            <duration value="0.01"/>
+            <effect_group>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" target="selfAOE" target_tags="ally" range="5" cvar="hamon" operation="add" value="8"/>
+            </effect_group>
+        </buff>
+        <buff name="buffHamonBurstApplicator05" icon="ui_game_symbol_run" hidden="true">
+            <stack_type value="replace"/>
+            <duration value="0.01"/>
+            <effect_group>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" target="selfAOE" target_tags="ally" range="5" cvar="hamon" operation="add" value="10"/>
+            </effect_group>
+        </buff>
+    </insertAfter>
+</configs>

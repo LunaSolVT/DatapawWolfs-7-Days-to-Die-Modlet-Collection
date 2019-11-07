@@ -1,0 +1,15 @@
+<configs>
+	<insertAfter xpath="/item_modifiers/item_modifier[@name='modGunMeleeTheHunter']">
+        <item_modifier id="modMeleeDragonslayer" name="Dragonslayer Clang-Wraps" installable_tags="dragonslayer" modifier_tags="damage" type="attachment">
+            <property name="CustomIcon" value="meleeKnucklesLeather"/>
+            <property name="CustomIconTint" value="149,52,54"/>
+            <property name="Stacknumber" value="1"/> <property name="Group" value="Mods"/>
+            <property name="DropMeshfile" value="#Other/Items?Misc/sack_droppedPrefab.prefab"/>
+            <property name="PickupJournalEntry" value="augmentGunsTip"/>
+
+            <effect_group name="Power Attack">
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="PlaySound" target="self" sound="clang"/>
+            </effect_group>
+	    </item_modifier>
+    </insertAfter>
+</configs>

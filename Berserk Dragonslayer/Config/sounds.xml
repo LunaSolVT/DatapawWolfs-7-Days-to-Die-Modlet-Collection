@@ -1,0 +1,13 @@
+<configs>
+	<insertAfter xpath="/Sounds/SoundDataNode[@name='swoosh']">
+        <SoundDataNode name="clang">
+            <AudioSource name="Sounds/AudioSource_Interact"/>
+            <AudioClip ClipName="#@modfolder:Sounds/clang.unity3d?clang.prefab"/>
+            <LocalCrouchVolumeScale value="0.25"/>
+            <CrouchNoiseScale value="0.35"/>
+            <NoiseScale value="1"/>
+            <MaxVoices value="2"/>
+            <MaxRepeatRate value="0.01"/>
+        </SoundDataNode>
+    </insertAfter>
+</configs>

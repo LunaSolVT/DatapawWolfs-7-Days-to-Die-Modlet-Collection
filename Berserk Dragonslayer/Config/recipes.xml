@@ -1,0 +1,13 @@
+<configs>
+    <append xpath="/recipes">
+        <recipe name="Dragonslayer" count="1" craft_area="forge" craft_tool="toolForgeCrucible" material_based="true">
+            <ingredient name="unit_iron" count="3000"/>
+            <ingredient name="unit_clay" count="500"/>
+        </recipe>
+        
+        <recipe name="Dragonslayer Clang-Wraps" count="1">
+            <ingredient name="medicalBloodBag" count="1"/>
+            <ingredient name="resourceLeather" count="3"/>
+        </recipe>
+    </append>
+</configs>

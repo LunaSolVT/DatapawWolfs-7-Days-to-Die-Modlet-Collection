@@ -1,0 +1,5 @@
+<configs>
+        <insertAfter xpath="/item_modifiers/item_modifier[@name='modGunMeleeTheHunter']">
+                
+        </insertAfter>
+</configs>

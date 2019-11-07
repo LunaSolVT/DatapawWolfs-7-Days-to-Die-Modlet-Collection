@@ -1,0 +1,7 @@
+<configs>
+    <append xpath="/recipes">
+        <recipe name="Invisible Hand" count="1">
+            <ingredient name="resourceWood" count="1"/> <!-- Recipes that cost 0 count of an item or have no ingredient crash the game -->
+        </recipe>
+    </append>
+</configs>

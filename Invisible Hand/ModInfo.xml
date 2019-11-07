@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xml>
+    <ModInfo>
+        <Name value="Invisible Hand - For Cinematics"/>
+        <Description value="A craftable item that effectively hides the hand from the player's 1st and 3rd person perspective."/>
+        <Author value="DatapawWolf"/>
+        <Version value="1.0.0"/>
+        <Website value="https://www.twitter.com/DatapawWolf"/>
+    </ModInfo>
+</xml>

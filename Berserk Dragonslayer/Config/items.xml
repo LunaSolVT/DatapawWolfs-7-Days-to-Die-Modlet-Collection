@@ -1,0 +1,127 @@
+<configs>
+    <!--
+        WISHLIST:
+            * Power Attack modified range for more variation in swing types
+            * Ability to specify different swing animations instead of one hold type leading to only two animations
+            * Ability to swap Base and Power animations
+            * Support for overriding the necessity for localization file editing by using decs_base="description here" - a much more modder-friendly solution
+            * Support for sounds to be triggerable outside of their corresponding effect group
+            * Fix for onSelfPrimary/SecondaryActionRayHit "other" affecting the player in servers versus singleplayer
+            * onSelf[Primary, Secondary]ActionGrazeHit - why this does not exist is beyond me
+    -->
+    <insertAfter xpath="/items/item[@name='meleeToolSledgehammerSteel']">                                       <!-- Defines where the XML will be inserted when the mod is loaded -->
+        <item id="meleeDragonslayer" name="Dragonslayer">
+            <property name="CustomIcon" value="dragonslayer"/>                                                  <!-- Indicates the icon name -->
+            <property name="Tags" value="grunting,attStrength,dragonslayer"/>    <!-- Will change applicable passive buffs from skills -->
+            <property name="DisplayType" value="melee"/>                                                        <!--  -->
+            <property name="HoldType" value="4"/>                                                               <!-- Defines animations, currently = Sledgehammer -->
+            <property name="Meshfile" value="#@modfolder:Bundles/dragonslayer.unity3d?dragonslayer.prefab"/>    <!-- Defines the mesh file - the 3D model for the weapon -->
+            <property name="Material" value="Mmetal"/>                                                          <!-- What materials u got fam? -->
+            <!-- <property name="Weight" value="14"/> Weight attribute removed to allow the system to calculate the amount of scrap earned from scrapping Dragonslayer -->
+            <property name="RepairTools" value="resourceForgedSteel"/>                                          <!-- Defines what item you use to repair with -->
+            <property name="DegradationBreaksAfter" value="false"/>                                             <!-- True/false destroy the item on break? (could use for a bottle weapon) -->
+            <property name="SoundJammed" value="ItemNeedsRepair"/>                                              <!-- Not possible for melee weapons, but defined for ranged weapons -->
+            <property name="SoundDestroy" value="metaldestroy1"/>                                               <!-- When it breaks -->
+            <property name="FuelValue" value="250"/>                                                            <!-- How much fire in seconds it worth? -->
+            <property name="EconomicValue" value="5000"/>                                                       <!-- How many beans it worth? -->
+            <!-- <property name="CritChance" value="0.5"/> This attribute was deprecated and no longer in use within items.xml -->
+            <property name="Group" value="Ammo/Weapons"/>                                                       <!--  -->
+            <property name="ActionSkillGroup" value="Blade Weapons"/>                                           <!--  -->
+            <property name="CraftingSkillGroup" value="craftSkillWeapons"/>                                     <!-- What type of skill is involved in crafting the item -->
+            <!-- <property name="UnlockedBy" value="toolAnvilSchematic,toolForgeCrucibleSchematic"/> I would lock this behind strength but cannot lock behind number of ranks in one particular skill -->
+            <property name="ShowQuality" value="false"/>
+
+            <!-- Left Click swing base data -->
+            <property class="Action0">
+                <property name="Class" value="DynamicMelee"/>
+                <property name="Sphere" value=".15"/>
+                <property name="Sound_start" value="sledge_swinglight"/>
+                <property name="ToolCategory.harvestingTools" value=".4" param1="1"/>                           <!-- Reduced harvesting % to make it an ineffective harvesting tool - IT SMASHES BUT CAN'T DICE -->
+            
+                <property name="UseGrazingHits" value="true"/>                                                  <!-- Will allow the Dragonslayer to damage multiple targets in a single swing -->
+                <property name="GrazeStart" value=".45"/>
+                <property name="GrazeEnd" value=".55"/>
+                <property name="SwingDegrees" value="120"/>
+                <property name="SwingAngle" value="180"/>
+
+                <property class="HitSounds">
+                    <property name="Override0" value="organic" param1="metalsolidhitorganic"/>
+                </property>
+
+                <property class="GrazeSounds">
+                    <property name="Override0" value="organic" param1="metalgrazeorganic"/>
+                </property>
+            </property>
+            
+            <!-- Right Click swing base data -->
+            <property class="Action1">
+                <property name="Class" value="DynamicMelee"/>
+                <property name="Sphere" value="0.15"/>
+                <property name="Sound_start" value="sledge_swingheavy"/>
+                <property name="ToolCategory.harvestingTools" value=".5" param1="1"/>                           <!-- Limited to .5 to make it an ineffective harvesting tool -->
+                <property name="UsePowerAttackAnimation" value="true"/>
+
+                <property name="UseGrazingHits" value="true"/>                                                  <!-- Will allow the Dragonslayer to hit multiple targets in a single swing -->
+                <property name="GrazeStart" value=".45"/>
+                <property name="GrazeEnd" value=".55"/>
+                <property name="SwingDegrees" value="90"/>
+                <property name="SwingAngle" value="90"/>
+                
+                <property class="HitSounds">
+                    <property name="Override0" value="organic" param1="metalsolidhitorganic"/>
+                </property>
+                
+                <property class="GrazeSounds">
+                    <property name="Override0" value="organic" param1="metalgrazeorganic"/>
+                </property>
+            </property>
+            
+            <!-- Action0 (Left Click) swing base stats -->
+            <effect_group name="meleeDragonslayer">
+                <passive_effect name="MaxRange" operation="base_set" value="3.4"/>                              <!-- Distance forward a swing can collide with an entity -->
+                <!-- <passive_effect name="BlockRange" operation="base_set" value="3.5"/> Will affect the range at which it can strike a block - commented out because Dragonslayer is configured with a high range already -->
+                <passive_effect name="EntityDamage" operation="base_set" value="100"/>                          <!-- Unmodified damage that is applied to an entity -->
+                <passive_effect name="EntityDamage" operation="perc_add" value="-.10,.10"/>                     <!-- THIS MAY BE DELETED OR COMMENTED OUT IF UNDESIRED - custom mod solution pending -->
+                <!-- <passive_effect name="EntityDamage" operation="perc_add" value=".1,.5" tier="2,6"/> I removed the Tier bonus to flatten the damage scale for this item as balancing Dragonslayer for 1-6 tiers would be difficult -->
+                <passive_effect name="BlockDamage" operation="base_set" value="175"/>                           <!-- Unmodified damage that is applied to a block -->
+                <passive_effect name="BlockDamage" operation="perc_add" value="-.10,.10"/>                      <!-- THIS MAY BE DELETED OR COMMENTED OUT IF UNDESIRED - custom mod solution pending -->
+		        <!-- <passive_effect name="BlockDamage" operation="perc_add" value=".1,.5" tier="2,6"/> I removed the Tier bonus to flatten the damage scale for this item as balancing Dragonslayer for 1-6 tiers would be difficult -->
+                <passive_effect name="AttacksPerMinute" operation="base_set" value="31"/>                       <!-- Number of swings possible per minute -->
+                <passive_effect name="StaminaLoss" operation="base_set" value="30" tags="primary"/>             <!-- Stamina lost with each swing -->
+                <passive_effect name="DegradationMax" operation="base_set" value="20000"/>                       <!-- Total durability of item in points -->
+                <passive_effect name="DegradationPerUse" operation="base_set" value="10"/>                      <!-- Affects degradation per use -->
+                <passive_effect name="HarvestCount" operation="base_add" value="-0.9" tags="allHarvest"/>       <!-- % of resources allowed to be earned from damaging a harvest block -->
+                <passive_effect name="HarvestCount" operation="base_add" value="-0.9" tags="allToolsHarvest"/>  <!-- % of resources allowed to be earned from damaging a harvest block -->
+                <passive_effect name="HarvestCount" operation="base_add" value="-0.9" tags="oreWoodHarvest"/>   <!-- % of resources allowed to be earned from damaging a wood block -->
+                <passive_effect name="HarvestCount" operation="base_add" value="-0.75" tags="butcherHarvest"/>  <!-- % of resources allowed to be earned from damaging an animal body entity -->
+                <passive_effect name="ModSlots" operation="base_set" value="1"/>                                <!-- Total number of mod slots, which we are going to keep at 1 for the audio switcheroo mod -->
+                <!-- <passive_effect name="ModPowerBonus" operation="perc_add" value=".10" tags="EntityDamage,BlockDamage"/> I removed the mod Tier bonus to flatten the damage scale for this item as balancing Dragonslayer for 1-6 tiers would be difficult -->
+		        <!-- <passive_effect name="ModPowerBonus" operation="base_add" value="200" tags="EconomicValue"/> I removed the mod Tier bonus to flatten the money value scale for this item as balancing Dragonslayer for 1-6 tiers would be difficult -->
+                <passive_effect name="DismemberChance" operation="base_add" value=".1" tags="primary"/>        <!-- Chance to remove a limb from the enemy -->
+            </effect_group>
+            
+            <!-- Action0 (Left Click) swing effects: hit enemy is always knocked down and has 25% chance to cause knockdown to others within 3 block range -->
+            <effect_group name="Action0 Stun">
+                <!-- <triggered_effect trigger="onSelfPrimaryActionRayHit" action="AddBuff" target="otherAOE" range="0.01" buff="buffInjuryStunned02"/> -->
+                <triggered_effect trigger="onSelfPrimaryActionRayHit" action="AddBuff" target="other" buff="buffInjuryStunned02"/>
+                <triggered_effect trigger="onSelfPrimaryActionRayHit" action="AddBuff" target="otherAOE" range="3" buff="buffInjuryStunnedDragonslayer"/>
+            </effect_group>
+            
+            <!-- Action1 (Right Click) swing modified stats -->
+            <effect_group name="Power Attack">
+                <passive_effect name="EntityDamage" operation="perc_add" value=".75" tags="secondary"/>         <!-- Additional % damage that is applied to an entity -->
+                <passive_effect name="BlockDamage" operation="perc_add" value="0.75" tags="secondary"/>            <!-- Additional % damage that is applied to a block -->
+                <passive_effect name="AttacksPerMinute" operation="base_add" value="-3" tags="secondary"/>      <!-- Subtractional number of swings possible per minute -->
+                <passive_effect name="StaminaLoss" operation="base_add" value="20" tags="secondary"/>           <!-- Additional stamina lost with each swing -->
+                <passive_effect name="DismemberChance" operation="base_add" value=".6" tags="secondary"/>       <!-- Chance to remove a limb from the enemy - increased during the power attack -->
+            </effect_group>
+            
+            <!-- Action1 (Right Click) swing effect: hit enemy is always knocked down, a hit has a 25% chance to cause knockdown to others within 3 block range -->
+            <effect_group name="Action1 Knockdown">
+                <!-- <triggered_effect trigger="onSelfSecondaryActionRayHit" action="AddBuff" target="otherAOE" range="0.01" buff="buffInjuryKnockdown02"/> -->
+                <triggered_effect trigger="onSelfSecondaryActionRayHit" action="AddBuff" target="other" buff="buffInjuryKnockdown02"/>
+                <triggered_effect trigger="onSelfSecondaryActionRayHit" action="AddBuff" target="otherAOE" range="3" buff="buffInjuryKnockdownDragonslayer"/>
+            </effect_group>
+        </item>
+    </insertAfter>
+</configs>

@@ -1,0 +1,14 @@
+<configs>
+    <insertAfter xpath="/items/item[@name='meleeHandPlayer']">                                       <!-- Defines where the XML will be inserted when the mod is loaded -->
+        <item id="invisibleHandPlayer" name="Invisible Hand">
+            <property name="CustomIcon" value="armorMilitaryGloves"/>
+            <property name="CustomIconTint" value="10,10,10,100"/>
+            <property name="HoldType" value="9"/>
+            <property name="Material" value="Mwood"/>
+            <property name="Meshfile" value=""/>
+            <property name="Stacknumber" value="1"/>
+            <property name="Canhold" value="false"/>
+            <property name="Candrop" value="false"/>
+        </item>
+    </insertAfter>
+</configs>

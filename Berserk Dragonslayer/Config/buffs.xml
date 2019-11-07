@@ -1,0 +1,26 @@
+<configs>
+    <insertAfter xpath="/buffs/buff[@name='buffInjuryKnockdown01']">
+        <!-- NOTES: this buff is used as a surrogate to apply the knockdown buff individually and has a unique ID/name, also hidden from player sight -->
+        <buff name="buffInjuryKnockdownDragonslayer" hidden="true">
+            <damage_type value="knockdown"/>
+            <stack_type value="replace"/>
+            <duration value=".000001"/>
+            <effect_group>
+                <requirement name="EntityTagCompare" tags="zombie,animal"/>
+                <requirement name="RandomRoll" target="self" min_max="0,100" operation="LTE" value="30"/> <!-- Cannot use seed_type="Random" because this will cause the group to be affected -->
+				<triggered_effect trigger="onSelfBuffFinish" action="AddBuff" target="self" buff="buffInjuryKnockdown01"/>
+		    </effect_group>            
+        </buff>
+        
+        <buff name="buffInjuryStunnedDragonslayer" hidden="true">
+            <damage_type value="stun"/>
+            <stack_type value="replace"/>
+            <duration value=".000001"/>            
+            <effect_group>
+                <requirement name="EntityTagCompare" tags="zombie,animal"/>
+                <requirement name="RandomRoll" target="self" min_max="0,100" operation="LTE" value="30"/>
+				<triggered_effect trigger="onSelfBuffFinish" action="AddBuff" target="self" buff="buffInjuryStunned01"/>
+		    </effect_group>
+        </buff>
+    </insertAfter>
+</configs>
