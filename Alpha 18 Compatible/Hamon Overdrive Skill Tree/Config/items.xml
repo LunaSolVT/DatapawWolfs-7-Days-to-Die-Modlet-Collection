@@ -1,0 +1,179 @@
+<configs>
+    <!--
+        WISHLIST:
+            * 
+    -->
+    <insertAfter xpath="/items/item[@name='meleeKnucklesIron']"> <!-- Defines where the XML will be inserted when the mod is loaded -->
+        <item id="hamonTrainingWraps" name="Hamon Training Wraps"> <!-- T1 Hamon -->
+            <property name="Extends" value="meleeKnucklesLeather"/>
+            <property name="CustomIcon" value="meleeKnucklesLeather"/>
+            <property name="CustomIconTint" value="143,188,143"/>
+            <property name="Tags" value="weapon,canHaveCosmetic,attHamon,perkHamonRapidBreathing,perkHamonBarrage,perkHamonBurst,perkHamonSunlightYellowOverdrive,perkHamonForcedBreathing,perkHamonStoneGreyOverdrive,perkHamonIronBlackOverdrive,perkHamonAutumnGoldOverdrive,perkHamonEarthGreenOverdrive"/>
+            <property name="Weight" value="1"/>
+            <property name="RepairTools" value="resourceLeather"/>
+            <property name="UnlockedBy" value="Hamon"/>
+            <property class="Action0">
+                <property name="Class" value="DynamicMelee"/>
+                <property name="Sphere" value=".15"/>
+                <property name="Damage_type" value="Bashing"/>
+
+                <property name="UseGrazingHits" value="true"/>
+                <property name="GrazeStart" value=".3"/>
+                <property name="GrazeEnd" value=".5"/>
+                <property name="SwingDegrees" value="90"/>
+                <property name="SwingAngle" value="-90"/>
+            </property>
+
+            <property class="Action1">
+                <property name="Class" value="DynamicMelee"/>
+                <property name="Sphere" value=".15"/>
+                <property name="UsePowerAttackAnimation" value="true"/>
+
+                <property name="UseGrazingHits" value="true"/>
+                <property name="GrazeStart" value=".35"/>
+                <property name="GrazeEnd" value=".4"/>
+                <property name="SwingDegrees" value="30"/>
+                <property name="SwingAngle" value="90"/>
+            </property>
+
+            <effect_group name="hamonLeatherTrainingWraps">
+                <passive_effect name="EntityDamage" operation="base_set" value="8"/>
+                <passive_effect name="BlockDamage" operation="base_set" value="6"/>
+
+                <passive_effect name="DamageModifier" operation="perc_add" value="-.5" tags="earth,stone,metal,wood"/>
+                <passive_effect name="HarvestCount" operation="base_add" value="-.5" tags="allHarvest,allToolsHarvest,oreWoodHarvest"/>
+
+                <passive_effect name="AttacksPerMinute" operation="base_set" value="42"/>
+                <passive_effect name="StaminaLoss" operation="base_set" value="10" tags="primary"/>
+
+                <passive_effect name="MaxRange" operation="base_set" value="2.2"/>
+                <passive_effect name="BlockRange" operation="base_set" value="2.2"/>
+
+                <passive_effect name="DegradationMax" operation="base_set" value="400,700" tier="1,6"/>
+                <passive_effect name="DegradationPerUse" operation="base_set" value="3,2" tier="1,6"/>
+
+                <passive_effect name="ModSlots" operation="base_set" value="0"/>
+
+                <triggered_effect trigger="onSelfEquipStop" action="RemovePart" part="LeftKnuckle"/>
+                <triggered_effect trigger="onSelfEquipStart" action="AddPart" part="LeftKnuckle" prefab="#Other/Items?Weapons/Melee/KnuckleWraps/knuckleWrapsLeft_Prefab.prefab" parentTransform="Propjoint" localPos="0,0,0" localRot="0,0,0">
+                    <requirement name="IsFPV"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfEquipStart" action="AddPart" part="LeftKnuckle" prefab="#Other/Items?Weapons/Melee/KnuckleWraps/knuckleWrapsLeft_Prefab.prefab" parentTransform="LeftHand" localPos="-0.0878,-0.0016,-0.0013" localRot="3.841982,9.94,94.3">
+                    <requirement name="!IsFPV"/>
+                </triggered_effect>
+                
+                <triggered_effect trigger="onSelfPrimaryActionEnd" action="RemovePart" part="LeftKnuckleSparks"/>
+		        <triggered_effect trigger="onSelfPrimaryActionStart" action="AddPart" part="LeftKnuckleSparks" prefab="ParticleEffects/p_electric_shock_small" parentTransform="Propjoint" localPos="0,-.55,0" localRot="0,0,0">
+                    <requirement name="IsFPV"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfPrimaryActionStart" action="AddPart" part="LeftKnuckleSparks" prefab="ParticleEffects/p_electric_shock_small" parentTransform="LeftHand" localPos="0,-.55,0" localRot="0,0,0">
+                    <requirement name="!IsFPV"/>
+                </triggered_effect>
+
+                <triggered_effect trigger="onSelfSecondaryActionEnd" action="RemovePart" part="RightKnuckleSparks"/>
+		        <triggered_effect trigger="onSelfSecondaryActionStart" action="AddPart" part="RightKnuckleSparks" prefab="ParticleEffects/p_electric_shock_small" parentTransform="#HeldItemRoot" localPos="0,-.55,0" localRot="0,0,0">
+                    <requirement name="IsFPV"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfSecondaryActionStart" action="AddPart" part="RightKnuckleSparks" prefab="ParticleEffects/p_electric_shock_small" parentTransform="#HeldItemRoot" localPos="0,-.55,0" localRot="0,0,0">
+                    <requirement name="!IsFPV"/>
+                </triggered_effect>
+
+                <!-- Prevents player from keeping sparking effect if dies during an attack -->
+                <triggered_effect trigger="onSelfDied" action="RemovePart" part="LeftKnuckleSparks"/>
+                <triggered_effect trigger="onSelfDied" action="RemovePart" part="RightKnuckleSparks"/>
+            </effect_group>
+
+            <effect_group name="Power Attack">
+                <passive_effect name="EntityDamage" operation="perc_add" value=".3" tags="secondary"/>
+                <passive_effect name="BlockDamage" operation="perc_add" value=".3" tags="secondary"/>
+                <passive_effect name="AttacksPerMinute" operation="perc_add" value="-.2" tags="secondary"/>
+                <passive_effect name="StaminaLoss" operation="base_add" value="10" tags="secondary"/>
+            </effect_group>
+        </item>
+
+        <item id="hamonMetalSilverDrivers" name="Hamon Metal Silver Drivers"> <!-- T2 Hamon -->
+            <property name="Extends" value="meleeKnucklesIron"/>
+            <property name="CustomIcon" value="meleeKnucklesIron"/>
+            <property name="Tags" value="weapon,canHaveCosmetic,attHamon,perkHamonRapidBreathing,perkHamonBarrage,perkHamonBurst,perkHamonSunlightYellowOverdrive,perkHamonForcedBreathing,perkHamonStoneGreyOverdrive,perkHamonIronBlackOverdrive,perkHamonAutumnGoldOverdrive,perkHamonEarthGreenOverdrive"/>
+            <property name="RepairTools" value="resourceRepairKit"/>
+            <property name="UnlockedBy" value="Hamon"/>
+            <property class="Action0">
+                <property name="Class" value="DynamicMelee"/>
+                <property name="Sphere" value=".15"/>
+                <property name="Damage_type" value="Bashing"/>
+
+                <property name="UseGrazingHits" value="true"/>
+                <property name="GrazeStart" value=".3"/>
+                <property name="GrazeEnd" value=".5"/>
+                <property name="SwingDegrees" value="90"/>
+                <property name="SwingAngle" value="-90"/>
+            </property>
+
+            <property class="Action1">
+                <property name="Class" value="DynamicMelee"/>
+                <property name="Sphere" value=".15"/>
+                <property name="UsePowerAttackAnimation" value="true"/>
+
+                <property name="UseGrazingHits" value="true"/>
+                <property name="GrazeStart" value=".35"/>
+                <property name="GrazeEnd" value=".4"/>
+                <property name="SwingDegrees" value="30"/>
+                <property name="SwingAngle" value="90"/>
+            </property>
+
+            <effect_group name="hamonMetalSilverDrivers">
+                <passive_effect name="EntityDamage" operation="base_set" value="16"/>
+                <passive_effect name="BlockDamage" operation="base_set" value="10"/>
+
+                <passive_effect name="DamageModifier" operation="perc_add" value="-.5" tags="earth,stone,metal,wood"/>
+                <passive_effect name="HarvestCount" operation="base_add" value="-.5" tags="allHarvest,allToolsHarvest,oreWoodHarvest"/>
+
+                <passive_effect name="AttacksPerMinute" operation="base_set" value="50"/>
+                <passive_effect name="StaminaLoss" operation="base_set" value="9" tags="primary"/>
+
+                <passive_effect name="MaxRange" operation="base_set" value="2.2"/>
+                <passive_effect name="BlockRange" operation="base_set" value="2.2"/>
+
+                <passive_effect name="DegradationMax" operation="base_set" value="800,1000" tier="1,6"/>
+                <passive_effect name="DegradationPerUse" operation="base_set" value="3,2" tier="1,6"/>
+
+                <passive_effect name="ModSlots" operation="base_set" value="0"/>
+
+                <triggered_effect trigger="onSelfEquipStop" action="RemovePart" part="LeftKnuckle"/>
+                <triggered_effect trigger="onSelfEquipStart" action="AddPart" part="LeftKnuckle" prefab="#Other/Items?Weapons/Melee/KnuckleWraps/knuckles_Prefab.prefab" parentTransform="Propjoint" localPos="0,0,0" localRot="0,0,0">
+                    <requirement name="IsFPV"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfEquipStart" action="AddPart" part="LeftKnuckle" prefab="#Other/Items?Weapons/Melee/KnuckleWraps/knuckles_Prefab.prefab" parentTransform="LeftHand" localPos="-0.0878,-0.0016,-0.0013" localRot="3.841982,9.94,94.3">
+                    <requirement name="!IsFPV"/>
+                </triggered_effect>
+                
+                <triggered_effect trigger="onSelfPrimaryActionEnd" action="RemovePart" part="LeftKnuckleSparks"/>
+		        <triggered_effect trigger="onSelfPrimaryActionStart" action="AddPart" part="LeftKnuckleSparks" prefab="ParticleEffects/p_electric_shock_small" parentTransform="Propjoint" localPos="0,-.55,0" localRot="0,0,0">
+                    <requirement name="IsFPV"/>
+                    <requirement name="ProgressionLevel" progression_name="Hamon" operation="GTE" value="1"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfPrimaryActionStart" action="AddPart" part="LeftKnuckleSparks" prefab="ParticleEffects/p_electric_shock_small" parentTransform="LeftHand" localPos="0,-.55,0" localRot="0,0,0">
+                    <requirement name="!IsFPV"/>
+                    <requirement name="ProgressionLevel" progression_name="Hamon" operation="GTE" value="1"/>
+                </triggered_effect>
+
+                <triggered_effect trigger="onSelfSecondaryActionEnd" action="RemovePart" part="RightKnuckleSparks"/>
+		        <triggered_effect trigger="onSelfSecondaryActionStart" action="AddPart" part="RightKnuckleSparks" prefab="ParticleEffects/p_electric_shock_small" parentTransform="#HeldItemRoot" localPos="0,-.55,0" localRot="0,0,0">
+                    <requirement name="IsFPV"/>
+                    <requirement name="ProgressionLevel" progression_name="Hamon" operation="GTE" value="1"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfSecondaryActionStart" action="AddPart" part="RightKnuckleSparks" prefab="ParticleEffects/p_electric_shock_small" parentTransform="#HeldItemRoot" localPos="0,-.55,0" localRot="0,0,0">
+                    <requirement name="!IsFPV"/>
+                    <requirement name="ProgressionLevel" progression_name="Hamon" operation="GTE" value="1"/>
+                </triggered_effect>
+            </effect_group>
+
+            <effect_group name="Power Attack">
+                <passive_effect name="EntityDamage" operation="perc_add" value=".3" tags="secondary"/>
+                <passive_effect name="BlockDamage" operation="perc_add" value=".3" tags="secondary"/>
+                <passive_effect name="AttacksPerMinute" operation="perc_add" value="-.2" tags="secondary"/>
+                <passive_effect name="StaminaLoss" operation="base_add" value="9" tags="secondary"/>
+            </effect_group>
+        </item>        
+    </insertAfter>
+</configs>
