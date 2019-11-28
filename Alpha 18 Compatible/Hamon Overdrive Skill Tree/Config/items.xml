@@ -8,7 +8,7 @@
             <property name="Extends" value="meleeKnucklesLeather"/>
             <property name="CustomIcon" value="meleeKnucklesLeather"/>
             <property name="CustomIconTint" value="143,188,143"/>
-            <property name="Tags" value="weapon,canHaveCosmetic,attHamon,perkHamonRapidBreathing,perkHamonBarrage,perkHamonBurst,perkHamonSunlightYellowOverdrive,perkHamonForcedBreathing,perkHamonStoneGreyOverdrive,perkHamonIronBlackOverdrive,perkHamonAutumnGoldOverdrive,perkHamonEarthGreenOverdrive"/>
+            <property name="Tags" value="weapon,canHaveCosmetic,attHamon,perkHamonRapidBreathing,perkHamonBarrage,perkHamonBurst,perkHamonBreathReleaseTiming,perkHamonSunlightYellowOverdrive,perkHamonForcedBreathing,perkHamonStoneGreyOverdrive,perkHamonIronBlackOverdrive,perkHamonAutumnGoldOverdrive,perkHamonEarthGreenOverdrive"/>
             <property name="Weight" value="1"/>
             <property name="RepairTools" value="resourceLeather"/>
             <property name="UnlockedBy" value="Hamon"/>
@@ -41,7 +41,7 @@
                 <passive_effect name="BlockDamage" operation="base_set" value="6"/>
 
                 <passive_effect name="DamageModifier" operation="perc_add" value="-.5" tags="earth,stone,metal,wood"/>
-                <passive_effect name="HarvestCount" operation="base_add" value="-.5" tags="allHarvest,allToolsHarvest,oreWoodHarvest"/>
+                <passive_effect name="HarvestCount" operation="base_add" value="-.75" tags="allHarvest,allToolsHarvest,oreWoodHarvest"/>
 
                 <passive_effect name="AttacksPerMinute" operation="base_set" value="42"/>
                 <passive_effect name="StaminaLoss" operation="base_set" value="10" tags="primary"/>
@@ -86,7 +86,8 @@
             <effect_group name="Power Attack">
                 <passive_effect name="EntityDamage" operation="perc_add" value=".3" tags="secondary"/>
                 <passive_effect name="BlockDamage" operation="perc_add" value=".3" tags="secondary"/>
-                <passive_effect name="AttacksPerMinute" operation="perc_add" value="-.2" tags="secondary"/>
+
+                <passive_effect name="AttacksPerMinute" operation="perc_add" value="-.2" tags="secondary"/>                
                 <passive_effect name="StaminaLoss" operation="base_add" value="10" tags="secondary"/>
             </effect_group>
         </item>
@@ -112,6 +113,7 @@
             <property class="Action1">
                 <property name="Class" value="DynamicMelee"/>
                 <property name="Sphere" value=".15"/>
+                <property name="Damage_type" value="Bashing"/>
                 <property name="UsePowerAttackAnimation" value="true"/>
 
                 <property name="UseGrazingHits" value="true"/>
@@ -126,7 +128,7 @@
                 <passive_effect name="BlockDamage" operation="base_set" value="10"/>
 
                 <passive_effect name="DamageModifier" operation="perc_add" value="-.5" tags="earth,stone,metal,wood"/>
-                <passive_effect name="HarvestCount" operation="base_add" value="-.5" tags="allHarvest,allToolsHarvest,oreWoodHarvest"/>
+                <passive_effect name="HarvestCount" operation="base_add" value="-.75" tags="allHarvest,allToolsHarvest,oreWoodHarvest"/>
 
                 <passive_effect name="AttacksPerMinute" operation="base_set" value="50"/>
                 <passive_effect name="StaminaLoss" operation="base_set" value="9" tags="primary"/>
@@ -134,7 +136,7 @@
                 <passive_effect name="MaxRange" operation="base_set" value="2.2"/>
                 <passive_effect name="BlockRange" operation="base_set" value="2.2"/>
 
-                <passive_effect name="DegradationMax" operation="base_set" value="800,1000" tier="1,6"/>
+                <passive_effect name="DegradationMax" operation="base_set" value="600,800" tier="1,6"/>
                 <passive_effect name="DegradationPerUse" operation="base_set" value="3,2" tier="1,6"/>
 
                 <passive_effect name="ModSlots" operation="base_set" value="0"/>
@@ -171,6 +173,7 @@
             <effect_group name="Power Attack">
                 <passive_effect name="EntityDamage" operation="perc_add" value=".3" tags="secondary"/>
                 <passive_effect name="BlockDamage" operation="perc_add" value=".3" tags="secondary"/>
+
                 <passive_effect name="AttacksPerMinute" operation="perc_add" value="-.2" tags="secondary"/>
                 <passive_effect name="StaminaLoss" operation="base_add" value="9" tags="secondary"/>
             </effect_group>

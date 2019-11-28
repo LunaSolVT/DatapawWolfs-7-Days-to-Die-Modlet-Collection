@@ -6,10 +6,16 @@
                 ^ This may be fixed in future releases - if shit's broke, check this
     -->
     <insertAfter xpath="/buffs/buff[@name='buffInjuryKnockdown01']">
-        <buff name="buffHamonBarrage" icon="ui_game_symbol_boxer" icon_color="0,0,130" hidden="false" description_key="buffHamonBarrage01Desc">
+        <buff name="buffHamonBarrage" icon="ui_game_symbol_boxer" icon_color="0,0,130" description_key="buffHamonBarrage01Desc">
             <stack_type value="replace"/>
             <duration value="3"/>
             <display_value value=".hamonBarrageCombo"/><display_value_key value="COMBO: {0}"/>
+
+            <!-- Combo initialization -->
+            <effect_group>
+                <!-- Begin combo at one - starting at 0 feels unusual -->
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageCombo" operation="set" value="1"/>
+            </effect_group>
             
             <!-- Hamon Barrage -->
             <effect_group>
@@ -293,12 +299,12 @@
                     <passive_effect name="BlockRange" operation="base_add" value="@.hamonZoomPunchBlock"/>
 
                     <!-- Increments buff combo counter -->
-                    <triggered_effect trigger="onSelfBuffStack" action="AddBuff" buff="buffHamonBarrageComboIncrement"/>
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonBarrageCombo" operation="add" value="1"/>
+                    <!-- <triggered_effect trigger="onSelfBuffStack" action="AddBuff" buff="buffHamonBarrageComboIncrement"/> -->
             </effect_group>
 
-            <!-- Hamon Buff End Triggers -->
+            <!-- DEBUG -->
             <effect_group>
-                <!-- DEBUG -->
                 <triggered_effect trigger="onSelfPrimaryActionRayHit" action="CVarLogValue" cvar=".hamonBarrageCombo"/>
                 <triggered_effect trigger="onSelfSecondaryActionRayHit" action="CVarLogValue" cvar=".hamonBarrageCombo"/>
             </effect_group>
@@ -317,24 +323,16 @@
                     <passive_effect name="EntityDamage" operation="base_add" value="20">
                         <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="4"/>
                     </passive_effect>
-                    <passive_effect name="EntityDamage" operation="base_add" value="75">
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="9"/>
-                    </passive_effect>
                     <passive_effect name="EntityDamage" operation="base_add" value="50000">
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="10"/>
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
                     </passive_effect>
 
                     <!-- Passive effects - Block Damage -->
-                    <passive_effect name="BlockDamage" operation="base_add" value="10">
+                    <passive_effect name="BlockDamage" operation="base_add" value="20">
                         <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="4"/>
                     </passive_effect>
-                    <passive_effect name="BlockDamage" operation="base_add" value="30">
+                    <passive_effect name="BlockDamage" operation="base_add" value="200">
                         <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="9"/>
-                    </passive_effect>
-                    <passive_effect name="BlockDamage" operation="base_add" value="100">
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="10"/>
                     </passive_effect>
 
                     <passive_effect name="AttacksPerMinute" operation="perc_set" value="1"/>
@@ -362,29 +360,9 @@
                         <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="4"/>
                         <requirement name="EntityTagCompare" target="other" tags="zombie"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="250">
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="9"/>
-                        <requirement name="EntityTagCompare" target="other" tags="zombie"/>
-                    </triggered_effect>
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="1000">
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="10"/>
-                        <requirement name="EntityTagCompare" target="other" tags="zombie"/>
-                    </triggered_effect>
                     <!-- Trigger effects - Primary - Animal -->
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="50">
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="35">
                         <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="4"/>
-                        <requirement name="EntityTagCompare" target="other" tags="animal"/>
-                        <requirement name="!EntityTagCompare" target="other" tags="zombie"/>
-                    </triggered_effect>
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="250">
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="9"/>
-                        <requirement name="EntityTagCompare" target="other" tags="animal"/>
-                        <requirement name="!EntityTagCompare" target="other" tags="zombie"/>
-                    </triggered_effect>
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="1000">
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="10"/>
                         <requirement name="EntityTagCompare" target="other" tags="animal"/>
                         <requirement name="!EntityTagCompare" target="other" tags="zombie"/>
                     </triggered_effect>
@@ -400,13 +378,13 @@
                     <triggered_effect trigger="onSelfPrimaryActionRayHit" action="AddBuff" buff="buffHamonBarrageComboReset"/>
 
                     <!-- Set cooldown duration value -->
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="20">
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="50">
                         <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="1"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="15">
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="30">
                         <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="2"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="10">
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="15">
                         <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="3"/>
                     </triggered_effect>
                     <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="5">
@@ -421,13 +399,13 @@
                     <triggered_effect trigger="onSelfPrimaryActionRayMiss" action="AddBuff" buff="buffHamonBarrageComboReset"/>
 
                     <!-- Set cooldown duration value -->
-                    <triggered_effect trigger="onSelfPrimaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="20">
+                    <triggered_effect trigger="onSelfPrimaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="50">
                         <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="1"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfPrimaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="15">
+                    <triggered_effect trigger="onSelfPrimaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="30">
                         <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="2"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfPrimaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="10">
+                    <triggered_effect trigger="onSelfPrimaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="15">
                         <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="3"/>
                     </triggered_effect>
                     <triggered_effect trigger="onSelfPrimaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="5">
@@ -446,29 +424,9 @@
                         <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="4"/>
                         <requirement name="EntityTagCompare" target="other" tags="zombie"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="250">
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="9"/>
-                        <requirement name="EntityTagCompare" target="other" tags="zombie"/>
-                    </triggered_effect>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="1000">
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="10"/>
-                        <requirement name="EntityTagCompare" target="other" tags="zombie"/>
-                    </triggered_effect>
                     <!-- Trigger effects - Secondary - Animal -->
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="50">
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="35">
                         <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="4"/>
-                        <requirement name="EntityTagCompare" target="other" tags="animal"/>
-                        <requirement name="!EntityTagCompare" target="other" tags="zombie"/>
-                    </triggered_effect>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="250">
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="LT" value="9"/>
-                        <requirement name="EntityTagCompare" target="other" tags="animal"/>
-                        <requirement name="!EntityTagCompare" target="other" tags="zombie"/>
-                    </triggered_effect>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="1000">
-                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="10"/>
                         <requirement name="EntityTagCompare" target="other" tags="animal"/>
                         <requirement name="!EntityTagCompare" target="other" tags="zombie"/>
                     </triggered_effect>
@@ -484,13 +442,13 @@
                     <triggered_effect trigger="onSelfSecondaryActionRayHit" action="AddBuff" buff="buffHamonBarrageComboReset"/>
                     
                     <!-- Set cooldown duration value -->
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="20">
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="50">
                         <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="1"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="15">
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="30">
                         <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="2"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="10">
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="15">
                         <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="3"/>
                     </triggered_effect>
                     <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="5">
@@ -505,13 +463,13 @@
                     <triggered_effect trigger="onSelfSecondaryActionRayMiss" action="AddBuff" buff="buffHamonBarrageComboReset"/>
 
                     <!-- Set cooldown duration value -->
-                    <triggered_effect trigger="onSelfSecondaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="20">
+                    <triggered_effect trigger="onSelfSecondaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="50">
                         <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="1"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfSecondaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="15">
+                    <triggered_effect trigger="onSelfSecondaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="30">
                         <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="2"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfSecondaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="10">
+                    <triggered_effect trigger="onSelfSecondaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="15">
                         <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="3"/>
                     </triggered_effect>
                     <triggered_effect trigger="onSelfSecondaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="5">
@@ -520,38 +478,6 @@
                     <triggered_effect trigger="onSelfSecondaryActionRayMiss" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="1">
                         <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="5"/>
                     </triggered_effect>
-            </effect_group>
-
-            <!-- Triggered actions - reset modifiers if perk level = 1 -->
-            <effect_group>
-                <!-- For Overdrive to occur, must be a combo of 1 of greater -->
-                <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="1"/>
-                <!-- Perk level = 1 or 2 -->
-                <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="LTE" value="2"/>
-                    <!-- RESET ALL COMBO MODIFIERS -->
-                    <!-- Reset Hamon Barrage Speed -->
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar=".hamonBarrageSpeed" operation="set" value="0"/>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar=".hamonBarrageSpeed" operation="set" value="0"/>
-
-                    <!-- Reset Hamon Breath Release resistance -->
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar=".hamonBuffResist" operation="set" value="0"/>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar=".hamonBuffResist" operation="set" value="0"/>
-
-                    <!-- Reset Hamon Rapid Breathing stamina reduction -->
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar=".hamonRapidBreathing" operation="set" value="0"/>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar=".hamonRapidBreathing" operation="set" value="0"/>
-
-                    <!-- Reset Hamon Rapid Breathing health regeneration -->
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegen" operation="set" value="0"/>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegen" operation="set" value="0"/>
-
-                    <!-- Reset Hamon Zoom Punch Range -->
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar=".hamonZoomPunch" operation="set" value="0"/>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar=".hamonZoomPunch" operation="set" value="0"/>
-
-                    <!-- Reset Hamon Zoom Punch Range -->
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar=".hamonZoomPunchBlock" operation="set" value="0"/>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar=".hamonZoomPunchBlock" operation="set" value="0"/>
             </effect_group>
 	    </buff>
 
@@ -636,15 +562,15 @@
             <update_rate value="1"/>
 
             <!-- Update hamon threshold prior to comparison -->
-            <!-- 0.8, or, 80%, is the effectiveness of Hamon damage - the buff will only kill when Hamon has reached 125% of the enemy health -->
+            <!-- 0.8, or, 80%, is the effectiveness of Hamon damage - the buff will only kill when Hamon has reached ~143% of the enemy health -->
             <!-- This makes Hamon less effective when mixed with other forms of combat -->
             <effect_group>
                 <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonThreshold" operation="set" value="@hamon"/>
-                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonThreshold" operation="multiply" value=".8"/>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonThreshold" operation="multiply" value=".7"/>
                 <triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".hamonThreshold" operation="set" value="@hamon"/>
-                <triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".hamonThreshold" operation="multiply" value=".8"/>
+                <triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".hamonThreshold" operation="multiply" value=".7"/>
                 <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonThreshold" operation="set" value="@hamon"/>
-                <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonThreshold" operation="multiply" value=".8"/>
+                <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonThreshold" operation="multiply" value=".7"/>
             </effect_group>
 
             <!-- DEBUG -->

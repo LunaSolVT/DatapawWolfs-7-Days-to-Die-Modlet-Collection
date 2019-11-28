@@ -1,97 +1,88 @@
 <configs>
     <insertAfter xpath="/progression/attributes/attribute[@name='attIntellect']">
-        <attribute min_level="0" cost_multiplier_per_level="1.175" name="Hamon" name_key="Attribute: Hamon" desc_key="Hamon is the energy produced through controlled breathing and can be utilized to destroy the undead. However, it deals half damage to living creatures, so be aware of the extent of your power!" icon="ui_game_symbol_talk"> <!-- ui_game_symbol_hand -->
+        <attribute min_level="0" name="Hamon" name_key="Attribute: Hamon" desc_key="Hamon is the energy produced through controlled breathing and can be utilized to destroy the undead. However, it deals half damage to living creatures, so be aware of the extent of your power!" icon="ui_game_symbol_talk"> <!-- ui_game_symbol_hand -->
             <level_requirements level="1"><requirement name="PlayerLevel" operation="GTE" value="1" desc_key="reqGenericPoints01"/></level_requirements>
             <level_requirements level="2"><requirement name="PlayerLevel" operation="GTE" value="4" desc_key="reqGenericPoints01"/></level_requirements>
             <level_requirements level="3"><requirement name="PlayerLevel" operation="GTE" value="7" desc_key="reqGenericPoints01"/></level_requirements>
             <level_requirements level="4"><requirement name="PlayerLevel" operation="GTE" value="10" desc_key="reqGenericPoints01"/></level_requirements>
-            <level_requirements level="5"><requirement name="PlayerLevel" operation="GTE" value="13" desc_key="reqGenericPoints02"/></level_requirements>
+            <level_requirements level="5"><requirement name="PlayerLevel" operation="GTE" value="13" desc_key="reqGenericPoints01"/></level_requirements>
             <level_requirements level="6"><requirement name="PlayerLevel" operation="GTE" value="16" desc_key="reqGenericPoints02"/></level_requirements>
-            <level_requirements level="7"><requirement name="PlayerLevel" operation="GTE" value="19" desc_key="reqGenericPoints03"/></level_requirements>
-            <level_requirements level="8"><requirement name="PlayerLevel" operation="GTE" value="22" desc_key="reqGenericPoints03"/></level_requirements>
-            <level_requirements level="9"><requirement name="PlayerLevel" operation="GTE" value="25" desc_key="reqGenericPoints04"/></level_requirements>
-            <level_requirements level="10"><requirement name="PlayerLevel" operation="GTE" value="30" desc_key="reqGenericPoints05"/></level_requirements>
+            <level_requirements level="7"><requirement name="PlayerLevel" operation="GTE" value="19" desc_key="reqGenericPoints02"/></level_requirements>
+            <level_requirements level="8"><requirement name="PlayerLevel" operation="GTE" value="22" desc_key="reqGenericPoints02"/></level_requirements>
+            <level_requirements level="9"><requirement name="PlayerLevel" operation="GTE" value="25" desc_key="reqGenericPoints03"/></level_requirements>
+            <level_requirements level="10"><requirement name="PlayerLevel" operation="GTE" value="30" desc_key="reqGenericPoints03"/></level_requirements>
             
             <effect_group>
                 <requirement name="HoldingItemHasTags" tags="attHamon"/>
                 <requirement name="ProgressionLevel" progression_name="Hamon" operation="GTE" value="1"/>
-                    <!-- Hamon combo evaluations Primary -->
+                    <!-- Hamon combo fist CVar set -->
                     <triggered_effect trigger="onSelfPrimaryActionStart" action="ModifyCVar" cvar=".hamonBarrageFistPrevious" operation="set" value="@.hamonBarrageFistCurrent"/>
                     <triggered_effect trigger="onSelfPrimaryActionStart" action="ModifyCVar" cvar=".hamonBarrageFistCurrent" operation="set" value="0"/>
                     <!-- Remove buff if same punch is thrown -->
                     <triggered_effect trigger="onSelfPrimaryActionStart" action="RemoveBuff" buff="buffHamonBarrage">
                         <requirement name="CVarCompare" cvar=".hamonBarrageFistPrevious" operation="Equals" value="@.hamonBarrageFistCurrent"/>
                     </triggered_effect>
-                    <!-- Add buff if alternating punch is thrown -->
-                    <triggered_effect trigger="onSelfPrimaryActionStart" action="AddBuff" buff="buffHamonBarrage">
-                        <requirement name="CVarCompare" cvar=".hamonBarrageFistPrevious" operation="NotEquals" value="@.hamonBarrageFistCurrent"/>
-                    </triggered_effect>
 
                     <!-- Begin evaluation when Primary Action ends -->
-                    <triggered_effect trigger="onSelfPrimaryActionEnd" action="RemoveBuff" buff="buffHamonBarrage">
-                        <requirement name="CVarCompare" cvar=".hasStruckBlock" operation="Equals" value="1"/>
-                        <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="0"/>
-                    </triggered_effect>
                     <triggered_effect trigger="onSelfPrimaryActionEnd" action="RemoveBuff" buff="buffHamonBarrage">
                         <requirement name="CVarCompare" cvar=".hasStruckObject" operation="Equals" value="0"/>
                         <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="0"/>
                     </triggered_effect>
                     <triggered_effect trigger="onSelfPrimaryActionEnd" action="RemoveBuff" buff="buffHamonBarrage">
-                        <!-- If we have not damaged a block, have not registered entity damage, but have registered a grazing hit -->
-                        <!-- This one is especially important because graze hits register on blocks even though they have NO EFFECT -->
-                        <requirement name="CVarCompare" cvar=".hasStruckBlock" operation="Equals" value="0"/>
+                        <requirement name="CVarCompare" cvar=".hasStruckBlock" operation="Equals" value="1"/>
                         <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="0"/>
-                        <requirement name="CVarCompare" cvar=".hasStruckObject" operation="Equals" value="1"/>
                     </triggered_effect>
+                    <!-- Reset CVars used during Primary strike evaluation -->
                     <triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar=".hasStruckBlock" operation="set" value="0"/>
                     <triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar=".hasStruckEntity" operation="set" value="0"/>
                     <triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar=".hasStruckObject" operation="set" value="0"/>
-
+                    
                     <!-- CVar set for missing either entity or block -->
                     <triggered_effect trigger="onSelfPrimaryActionGrazeMiss" action="ModifyCVar" cvar=".hasStruckObject" operation="set" value="1"/>
 
-
-                    <!-- Hamon combo evaluations Secondary -->
+                    
+                    <!-- Hamon combo fist CVar set -->
                     <triggered_effect trigger="onSelfSecondaryActionStart" action="ModifyCVar" cvar=".hamonBarrageFistPrevious" operation="set" value="@.hamonBarrageFistCurrent"/>
                     <triggered_effect trigger="onSelfSecondaryActionStart" action="ModifyCVar" cvar=".hamonBarrageFistCurrent" operation="set" value="1"/>
                     <!-- Remove buff if same punch is thrown -->
                     <triggered_effect trigger="onSelfSecondaryActionStart" action="RemoveBuff" buff="buffHamonBarrage">
                         <requirement name="CVarCompare" cvar=".hamonBarrageFistPrevious" operation="Equals" value="@.hamonBarrageFistCurrent"/>
                     </triggered_effect>
-                    <!-- Add buff if alternating punch is thrown -->
-                    <triggered_effect trigger="onSelfSecondaryActionStart" action="AddBuff" buff="buffHamonBarrage">
-                        <requirement name="CVarCompare" cvar=".hamonBarrageFistPrevious" operation="NotEquals" value="@.hamonBarrageFistCurrent"/>
-                    </triggered_effect>
 
                     <!-- Begin evaluation when Secondary Action ends -->
-                    <triggered_effect trigger="onSelfSecondaryActionEnd" action="RemoveBuff" buff="buffHamonBarrage">
-                        <requirement name="CVarCompare" cvar=".hasStruckBlock" operation="Equals" value="1"/>
-                        <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="0"/>
-                    </triggered_effect>
                     <triggered_effect trigger="onSelfSecondaryActionEnd" action="RemoveBuff" buff="buffHamonBarrage">
                         <requirement name="CVarCompare" cvar=".hasStruckObject" operation="Equals" value="0"/>
                         <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="0"/>
                     </triggered_effect>
-                    <!-- If we have not damaged a block, have not registered entity damage, but have registered a grazing hit -->
-                    <!-- This one is especially important because graze hits register on blocks even though they have NO EFFECT -->
                     <triggered_effect trigger="onSelfSecondaryActionEnd" action="RemoveBuff" buff="buffHamonBarrage">
-                        <requirement name="CVarCompare" cvar=".hasStruckBlock" operation="Equals" value="0"/>
+                        <requirement name="CVarCompare" cvar=".hasStruckBlock" operation="Equals" value="1"/>
                         <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="0"/>
-                        <requirement name="CVarCompare" cvar=".hasStruckObject" operation="Equals" value="1"/>
                     </triggered_effect>
+                    <!-- Reset CVars used during Secondary strike evaluation -->
                     <triggered_effect trigger="onSelfSecondaryActionEnd" action="ModifyCVar" cvar=".hasStruckBlock" operation="set" value="0"/>
                     <triggered_effect trigger="onSelfSecondaryActionEnd" action="ModifyCVar" cvar=".hasStruckEntity" operation="set" value="0"/>
                     <triggered_effect trigger="onSelfSecondaryActionEnd" action="ModifyCVar" cvar=".hasStruckObject" operation="set" value="0"/>
-                    
+
                     <!-- CVar set for missing either entity or block -->
                     <triggered_effect trigger="onSelfSecondaryActionGrazeMiss" action="ModifyCVar" cvar=".hasStruckObject" operation="set" value="1"/>
 
 
-                    <!-- Determine if player has struck block for evaluation buff -->
+                    <!-- Determine if player has struck block for evaluation of potential buff removal -->
                     <triggered_effect trigger="onSelfDamagedBlock" action="ModifyCVar" cvar=".hasStruckBlock" operation="set" value="1"/>
 
-                    <!-- Determine if player has struck block for evaluation buff -->
-                    <triggered_effect trigger="onSelfDamagedOther" action="ModifyCVar" cvar=".hasStruckEntity" operation="set" value="1"/>
+                    <!-- Award buff when player has struck a character entity but has not struck one previously during this action -->
+                    <triggered_effect trigger="onSelfDamagedOther" action="ModifyCVar" cvar=".hasStruckEntity" operation="set" value="1">
+                        <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="0"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfDamagedOther" action="AddBuff" buff="buffHamonBarrage">
+                        <!-- Only award buff when player has not yet struck an entity and is striking with the correct, alternating fist -->
+                        <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="1"/>
+                        <requirement name="CVarCompare" cvar=".hamonBarrageFistPrevious" operation="NotEquals" value="@.hamonBarrageFistCurrent"/>
+                        <requirement name="CVarCompare" cvar=".hamonBarrageFistCurrent" operation="NotEquals" value="-1"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfDamagedOther" action="ModifyCVar" cvar=".hasStruckEntity" operation="set" value="2">
+                        <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="1"/>
+                    </triggered_effect>
 
                     <!-- This allows all buff data to be initialized - else the first attack of play session will always malfunction -->
                     <triggered_effect trigger="onSelfEnteredGame" action="AddBuff" buff="buffHamonBarrage"/>
@@ -184,16 +175,16 @@
                 <requirement name="!EntityTagCompare" target="other" tags="zombie"/>
                 <requirement name="ProgressionLevel" progression_name="Hamon" operation="GTE" value="1"/>
                     <!-- Hamon damage application Primary attack -->
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="11">
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="8">
                         <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="1"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="15">
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="12">
                         <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="2"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="19">
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="15">
                         <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="3"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="26">
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="19">
                         <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="4"/>
                     </triggered_effect>
                     <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="30">
@@ -217,16 +208,16 @@
                     <triggered_effect trigger="onSelfPrimaryActionRayHit" action="AddBuff" target="other" buff="buffHamonTick"/>
 
                     <!-- Hamon damage application Secondary attack -->
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="11">
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="8">
                         <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="1"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="15">
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="12">
                         <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="2"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="19">
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="15">
                         <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="3"/>
                     </triggered_effect>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="26">
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="19">
                         <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="4"/>
                     </triggered_effect>
                     <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" target="other" cvar="hamon" operation="add" value="30">
@@ -251,16 +242,16 @@
             </effect_group>
 
             <effect_group>
-                <effect_description level="1" desc_key="attHamonRank1Desc" long_desc_key="Your fist strikes deal x points of Hamon damage to the enemy."/>
-                <effect_description level="2" desc_key="attHamonRank2Desc" long_desc_key="Your fist strikes deal x points of Hamon damage to the enemy."/>
-                <effect_description level="3" desc_key="attHamonRank3Desc" long_desc_key="Your fist strikes deal x points of Hamon damage to the enemy."/>
-                <effect_description level="4" desc_key="attHamonRank4Desc" long_desc_key="Your fist strikes deal x points of Hamon damage to the enemy."/>
-                <effect_description level="5" desc_key="attHamonRank5Desc" long_desc_key="Your fist strikes deal x points of Hamon damage to the enemy."/>
-                <effect_description level="6" desc_key="attHamonRank6Desc" long_desc_key="Your fist strikes deal x points of Hamon damage to the enemy."/>
-                <effect_description level="7" desc_key="attHamonRank7Desc" long_desc_key="Your fist strikes deal x points of Hamon damage to the enemy."/>
-                <effect_description level="8" desc_key="attHamonRank8Desc" long_desc_key="Your fist strikes deal x points of Hamon damage to the enemy."/>
-                <effect_description level="9" desc_key="attHamonRank9Desc" long_desc_key="Your fist strikes deal x points of Hamon damage to the enemy."/>
-                <effect_description level="10" desc_key="attHamonRank10Desc" long_desc_key="Your fist strikes deal x points of Hamon damage to the enemy."/>
+                <effect_description level="1" desc_key="attHamonRank1Desc" long_desc_key="Your fist strikes deal 10 points of Hamon damage to Zombies and 8 points of damage to living animals."/>
+                <effect_description level="2" desc_key="attHamonRank2Desc" long_desc_key="Your fist strikes deal 15 points of Hamon damage to Zombies and 12 points of damage to living animals."/>
+                <effect_description level="3" desc_key="attHamonRank3Desc" long_desc_key="Your fist strikes deal 20 points of Hamon damage to Zombies and 15 points of damage to living animals."/>
+                <effect_description level="4" desc_key="attHamonRank4Desc" long_desc_key="Your fist strikes deal 25 points of Hamon damage to Zombies and 20 points of damage to living animals."/>
+                <effect_description level="5" desc_key="attHamonRank5Desc" long_desc_key="Your fist strikes deal 40 points of Hamon damage to Zombies and 30 points of damage to living animals."/>
+                <effect_description level="6" desc_key="attHamonRank6Desc" long_desc_key="Your fist strikes deal 55 points of Hamon damage to Zombies and 40 points of damage to living animals."/>
+                <effect_description level="7" desc_key="attHamonRank7Desc" long_desc_key="Your fist strikes deal 75 points of Hamon damage to Zombies and 55 points of damage to living animals."/>
+                <effect_description level="8" desc_key="attHamonRank8Desc" long_desc_key="Your fist strikes deal 95 points of Hamon damage to Zombies and 70 points of damage to living animals."/>
+                <effect_description level="9" desc_key="attHamonRank9Desc" long_desc_key="Your fist strikes deal 120 points of Hamon damage to Zombies and 90 points of damage to living animals."/>
+                <effect_description level="10" desc_key="attHamonRank10Desc" long_desc_key="Your fist strikes deal 150 points of Hamon damage to Zombies and 100 points of damage to living animals."/>
             </effect_group>
         </attribute>
     </insertAfter>
@@ -387,11 +378,11 @@
             </effect_group>
 
             <effect_group>
-                <effect_description level="1" desc_key="perkHamonBurstRank1Desc" long_desc_key="Connecting your fist strike causes Hamon damage to collect within the enemy, which is released when the enemy dies to all enemies within X distance for Y stored Hamon damage."/>
-                <effect_description level="2" desc_key="perkHamonBurstRank2Desc" long_desc_key="Connecting your fist strike causes Hamon damage to collect within the enemy, which is released when the enemy dies to all enemies within X distance for Y stored Hamon damage."/>
-                <effect_description level="3" desc_key="perkHamonBurstRank3Desc" long_desc_key="Connecting your fist strike causes Hamon damage to collect within the enemy, which is released when the enemy dies to all enemies within X distance for Y stored Hamon damage."/>
-                <effect_description level="4" desc_key="perkHamonBurstRank4Desc" long_desc_key="Connecting your fist strike causes Hamon damage to collect within the enemy, which is released when the enemy dies to all enemies within X distance for Y stored Hamon damage."/>
-                <effect_description level="5" desc_key="perkHamonBurstRank5Desc" long_desc_key="Connecting your fist strike causes Hamon damage to collect within the enemy, which is released when the enemy dies to all enemies within X distance for Y stored Hamon damage."/>
+                <effect_description level="1" desc_key="perkHamonBurstRank1Desc" long_desc_key="When an enemy you strike dies within 2 seconds, energy bursts from its body and damages enemies within 2.75 distance for 5 Hamon damage."/>
+                <effect_description level="2" desc_key="perkHamonBurstRank2Desc" long_desc_key="When an enemy you strike dies within 2 seconds, energy bursts from its body and damages enemies within 3 distance for 10 Hamon damage."/>
+                <effect_description level="3" desc_key="perkHamonBurstRank3Desc" long_desc_key="When an enemy you strike dies within 2 seconds, energy bursts from its body and damages enemies within 3.5 distance for 20 Hamon damage."/>
+                <effect_description level="4" desc_key="perkHamonBurstRank4Desc" long_desc_key="When an enemy you strike dies within 2 seconds, energy bursts from its body and damages enemies within 4 distance for 35 Hamon damage."/>
+                <effect_description level="5" desc_key="perkHamonBurstRank5Desc" long_desc_key="When an enemy you strike dies within 2 seconds, energy bursts from its body and damages enemies within 5 distance for 55 Hamon damage."/>
             </effect_group>
         </perk>
 
@@ -406,11 +397,11 @@
                 <requirement name="HoldingItemHasTags" tags="perkHamonBarrage"/>
                     <passive_effect name="AttacksPerMinute" operation="perc_add" level="1,2,3,4,5" value=".05,.1,.15,.2,.25"/>
 
-                <effect_description level="1" desc_key="perkHamonBarrageRank1Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases your attack speed by X%, to a max of Y%."/>
-                <effect_description level="2" desc_key="perkHamonBarrageRank2Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases your attack speed by X%, to a max of Y%."/>
-                <effect_description level="3" desc_key="perkHamonBarrageRank3Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases your attack speed by X%, to a max of Y%."/>
-                <effect_description level="4" desc_key="perkHamonBarrageRank4Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases your attack speed by X%, to a max of Y%."/>
-                <effect_description level="5" desc_key="perkHamonBarrageRank5Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases your attack speed by X%, to a max of Y%."/>
+                <effect_description level="1" desc_key="perkHamonBarrageRank1Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases your attack speed by 10%, to a max of 50%."/>
+                <effect_description level="2" desc_key="perkHamonBarrageRank2Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases your attack speed by 20%, to a max of 100%."/>
+                <effect_description level="3" desc_key="perkHamonBarrageRank3Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases your attack speed by 30%, to a max of 150%."/>
+                <effect_description level="4" desc_key="perkHamonBarrageRank4Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases your attack speed by 45%, to a max of 225%."/>
+                <effect_description level="5" desc_key="perkHamonBarrageRank5Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases your attack speed by 70%, to a max of 350%."/>
             </effect_group>
         </perk>
 
@@ -425,11 +416,11 @@
                 <passive_effect name="BuffResistance" operation="base_add" level="1,5" value=".05,.25" tags="buffInfectionCatch,buffInjuryStunned01,buffInjuryStunned02,buffInjuryBleeding"/>
                 <passive_effect name="PhysicalDamageResist" operation="base_add" level="1,5" value="1,5" tags="coredamageresist"/>
 
-                <effect_description level="1" desc_key="perkHamonBreathReleaseTimingRank1Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases your debuff defense by X%, to a max of Y%."/>
-                <effect_description level="2" desc_key="perkHamonBreathReleaseTimingRank2Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases your attack speed by X%, to a max of Y%."/>
-                <effect_description level="3" desc_key="perkHamonBreathReleaseTimingRank3Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases your attack speed by X%, to a max of Y%."/>
-                <effect_description level="4" desc_key="perkHamonBreathReleaseTimingRank4Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases your attack speed by X%, to a max of Y%."/>
-                <effect_description level="5" desc_key="perkHamonBreathReleaseTimingRank5Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases your attack speed by X%, to a max of Y%."/>
+                <effect_description level="1" desc_key="perkHamonBreathReleaseTimingRank1Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases your debuff defense by 2%, to a max of 10%."/>
+                <effect_description level="2" desc_key="perkHamonBreathReleaseTimingRank2Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases your debuff defense by 4%, to a max of 20%."/>
+                <effect_description level="3" desc_key="perkHamonBreathReleaseTimingRank3Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases your debuff defense by 6%, to a max of 30%."/>
+                <effect_description level="4" desc_key="perkHamonBreathReleaseTimingRank4Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases your debuff defense by 10%, to a max of 50%."/>
+                <effect_description level="5" desc_key="perkHamonBreathReleaseTimingRank5Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases your debuff defense by 15%, to a max of 75%."/>
             </effect_group>
         </perk>
 
@@ -445,11 +436,11 @@
                 <passive_effect name="HealthChangeOT" operation="base_add" level="1,2,3,4,5" value=".1,.12,.16,.24,.34"/>
                 <passive_effect name="HealthMaxModifierOT" operation="base_add" level="1,2,3,4,5" value=".02,.03,.045,.06,.075"/>
 
-                <effect_description level="1" desc_key="perkHamonRapidBreathingRank1Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases"/>
-                <effect_description level="2" desc_key="perkHamonRapidBreathingRank2Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases"/>
-                <effect_description level="3" desc_key="perkHamonRapidBreathingRank3Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases"/>
-                <effect_description level="4" desc_key="perkHamonRapidBreathingRank4Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases"/>
-                <effect_description level="5" desc_key="perkHamonRapidBreathingRank5Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases"/>
+                <effect_description level="1" desc_key="perkHamonRapidBreathingRank1Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal decreases the stamina you use to strike by 2%, to a max of 10%."/>
+                <effect_description level="2" desc_key="perkHamonRapidBreathingRank2Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal decreases the stamina you use to strike by 7%, to a max of 35%."/>
+                <effect_description level="3" desc_key="perkHamonRapidBreathingRank3Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal decreases the stamina you use to strike by 10%, to a max of 50%."/>
+                <effect_description level="4" desc_key="perkHamonRapidBreathingRank4Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal decreases the stamina you use to strike by 12%, to a max of 60%."/>
+                <effect_description level="5" desc_key="perkHamonRapidBreathingRank5Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal decreases the stamina you use to strike by 15%, to a max of 75%."/>
             </effect_group>
         </perk>
 
@@ -465,15 +456,15 @@
                     <passive_effect name="MaxRange" operation="perc_add" level="1,2,3,4,5" value=".05,.1,.15,.2,.25"/>
                     <passive_effect name="BlockRange" operation="perc_add" level="1,2,3,4,5" value=".05,.1,.15,.2,.25"/>
 
-                <effect_description level="1" desc_key="perkHamonZoomPunchRank1Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases"/>
-                <effect_description level="2" desc_key="perkHamonZoomPunchRank2Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases"/>
-                <effect_description level="3" desc_key="perkHamonZoomPunchRank3Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases"/>
-                <effect_description level="4" desc_key="perkHamonZoomPunchRank4Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases"/>
-                <effect_description level="5" desc_key="perkHamonZoomPunchRank5Desc" long_desc_key="During Hamon Barrage, each fist strike that connects with the enemy increases"/>
+                <effect_description level="1" desc_key="perkHamonZoomPunchRank1Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases the maximum range of each strike by 0.04 meters, to a limit of 0.2 meters."/>
+                <effect_description level="2" desc_key="perkHamonZoomPunchRank2Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases the maximum range of each strike by 0.07 meters, to a limit of 0.35 meters."/>
+                <effect_description level="3" desc_key="perkHamonZoomPunchRank3Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases the maximum range of each strike by 0.1 meters, to a limit of 0.5 meters."/>
+                <effect_description level="4" desc_key="perkHamonZoomPunchRank4Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases the maximum range of each strike by 0.12 meters, to a limit of 0.6 meters."/>
+                <effect_description level="5" desc_key="perkHamonZoomPunchRank5Desc" long_desc_key="Each alternating fist strike that connects with a zombie or animal increases the maximum range of each strike by 0.14 meters, to a limit of 0.7 meters."/>
             </effect_group>
         </perk>
 
-        <perk name="perkHamonSunlightYellowOverdrive" parent="skillHamonCombat" name_key="Hamon Sunlight Yellow Overdrive" desc_key="Hamon Sunlight Yellow Overdrive allows the user to draw energy in strength comparable to the sun from their total combo and send that energy in dramatically increased Hamon and physical damage. To use Hamon Overdrive, crouch and punch while your combo is greater than 1, with increasing damage at 5 and insta-kill at 10." icon="ui_game_symbol_hot">
+        <perk name="perkHamonSunlightYellowOverdrive" parent="skillHamonCombat" name_key="Hamon Sunlight Yellow Overdrive" desc_key="Hamon Sunlight Yellow Overdrive allows the user to draw energy from a single focused breath to strike with the strength of the Sun. To use Hamon Overdrive, crouch and punch while your combo is greater than 1 to deal bonus damage, with increasing damage from 5 to 9 and instant death at 10 or greater." icon="ui_game_symbol_hot">
             <level_requirements level="1"><requirement name="ProgressionLevel" progression_name="Hamon" operation="GTE" value="1" desc_key="Requires Hamon Level 1"/></level_requirements>
             <level_requirements level="2"><requirement name="ProgressionLevel" progression_name="Hamon" operation="GTE" value="3" desc_key="Requires Hamon Level 3"/></level_requirements>
             <level_requirements level="3"><requirement name="ProgressionLevel" progression_name="Hamon" operation="GTE" value="5" desc_key="Requires Hamon Level 5"/></level_requirements>
@@ -485,14 +476,18 @@
                 <requirement name="CVarCompare" cvar="_crouching" operation="Equals" value="1"/>
                 <requirement name="NotHasBuff" buff="buffPerkHamonSunlightYellowOverdrive"/>
                 <requirement name="NotHasBuff" buff="buffPerkHamonSunlightYellowOverdriveCooldown"/>
-                    <triggered_effect trigger="onSelfPrimaryActionStart" action="AddBuff" buff="buffPerkHamonSunlightYellowOverdrive"/>
-                    <triggered_effect trigger="onSelfSecondaryActionStart" action="AddBuff" buff="buffPerkHamonSunlightYellowOverdrive"/>
+                    <triggered_effect trigger="onSelfPrimaryActionStart" action="AddBuff" buff="buffPerkHamonSunlightYellowOverdrive">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="GTE" value="1"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfSecondaryActionStart" action="AddBuff" buff="buffPerkHamonSunlightYellowOverdrive">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="GTE" value="1"/>
+                    </triggered_effect>
                     
-                <effect_description level="1" desc_key="perkHamonSunlightYellowOverdriveRank1Desc" long_desc_key="When you connect your fist strike during Hamon Barrage after beginning the punch while crouching, your combo and passive bonuses from Hamon Barrage reset, which may put you in a dangerous situation during combat."/>
-                <effect_description level="2" desc_key="perkHamonSunlightYellowOverdriveRank2Desc" long_desc_key="When you connect your fist strike during Hamon Barrage after beginning the punch while crouching, your combo and passive bonuses from Hamon Barrage reset, which may put you in a dangerous situation during combat."/>
-                <effect_description level="3" desc_key="perkHamonSunlightYellowOverdriveRank3Desc" long_desc_key="When you connect your fist strike during Hamon Barrage after beginning the punch while crouching, your combo and passive bonuses from Hamon Barrage are fully retained, allowing you to chain Hamon Sunlight Yellow Overdrive multiple times throughout a fight."/>
-                <effect_description level="4" desc_key="perkHamonSunlightYellowOverdriveRank4Desc" long_desc_key="When you connect your fist strike during Hamon Barrage after beginning the punch while crouching, your combo and passive bonuses from Hamon Barrage are fully retained, allowing you to chain Hamon Sunlight Yellow Overdrive multiple times throughout a fight."/>
-                <effect_description level="5" desc_key="perkHamonSunlightYellowOverdriveRank5Desc" long_desc_key="When you connect your fist strike during Hamon Barrage after beginning the punch while crouching, your combo and passive bonuses from Hamon Barrage are fully retained, allowing you to chain Hamon Sunlight Yellow Overdrive multiple times throughout a fight. Your cooldown is now 1 second. Enjoy."/>
+                <effect_description level="1" desc_key="perkHamonSunlightYellowOverdriveRank1Desc" long_desc_key="When you connect your fist strike during Hamon Barrage after beginning the strike while crouching, your combo is reset and you must wait at least 50 seconds before using Hamon Sunlight Yellow Overdrive again."/>
+                <effect_description level="2" desc_key="perkHamonSunlightYellowOverdriveRank2Desc" long_desc_key="When you connect your fist strike during Hamon Barrage after beginning the strike while crouching, your combo is reset and you must wait at least 30 seconds before using Hamon Sunlight Yellow Overdrive again."/>
+                <effect_description level="3" desc_key="perkHamonSunlightYellowOverdriveRank3Desc" long_desc_key="When you connect your fist strike during Hamon Barrage after beginning the strike while crouching, your combo is reset and you must wait at least 15 seconds before using Hamon Sunlight Yellow Overdrive again"/>
+                <effect_description level="4" desc_key="perkHamonSunlightYellowOverdriveRank4Desc" long_desc_key="When you connect your fist strike during Hamon Barrage after beginning the strike while crouching, your combo is reset and you must wait at least 5 seconds before using Hamon Sunlight Yellow Overdrive again."/>
+                <effect_description level="5" desc_key="perkHamonSunlightYellowOverdriveRank5Desc" long_desc_key="When you connect your fist strike during Hamon Barrage after beginning the strike while crouching, your combo is reset and you must wait at least 1 second before using Hamon Sunlight Yellow Overdrive again."/>
             </effect_group>
         </perk>
 
@@ -540,6 +535,7 @@
             </effect_group>
         </perk>
 
+        <!-- THIS IS ALL FUCCED -->
         <perk name="perkHamonForcedBreathing" parent="skillHamonMasterUtilityPerks" max_level="1" base_skill_point_cost="2" name_key="Hamon Forced Breathing" desc_key="Hamon Forced Breathing allows the user to strike living beings and flood their respiratory system with Hamon. When striking another player in the abdomen, they will heal a total of X damage over Y seconds. This ability can be can be activated on the target player every Z seconds." icon="ui_game_symbol_smell">
             <level_requirements level="30"><requirement name="ProgressionLevel" progression_name="Hamon" operation="GTE" value="10" desc_key="Requires Hamon Level 10"/></level_requirements>
 
