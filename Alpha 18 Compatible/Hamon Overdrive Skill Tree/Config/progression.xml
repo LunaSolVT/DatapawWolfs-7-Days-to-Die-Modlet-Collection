@@ -1,16 +1,23 @@
 <configs>
     <insertAfter xpath="/progression/attributes/attribute[@name='attIntellect']">
-        <attribute min_level="0" name="Hamon" name_key="Attribute: Hamon" desc_key="Hamon is the energy produced through controlled breathing and can be utilized to destroy the undead. However, it deals half damage to living creatures, so be aware of the extent of your power!" icon="ui_game_symbol_talk"> <!-- ui_game_symbol_hand -->
+        <attribute min_level="0" cost_multiplier_per_level="1.128" name="Hamon" name_key="Attribute: Hamon" desc_key="Hamon is energy produced through controlled breathing and can be utilized to destroy the undead. However, it deals only half damage to living creatures! In addition, you can perform squats to power up to your maximum potential - utilize this ability out of combat so you are ready to jump into the fray with burning passion!" icon="ui_game_symbol_talk"> <!-- ui_game_symbol_hand -->
             <level_requirements level="1"><requirement name="PlayerLevel" operation="GTE" value="1" desc_key="reqGenericPoints01"/></level_requirements>
-            <level_requirements level="2"><requirement name="PlayerLevel" operation="GTE" value="4" desc_key="reqGenericPoints01"/></level_requirements>
-            <level_requirements level="3"><requirement name="PlayerLevel" operation="GTE" value="7" desc_key="reqGenericPoints01"/></level_requirements>
-            <level_requirements level="4"><requirement name="PlayerLevel" operation="GTE" value="10" desc_key="reqGenericPoints01"/></level_requirements>
-            <level_requirements level="5"><requirement name="PlayerLevel" operation="GTE" value="13" desc_key="reqGenericPoints01"/></level_requirements>
-            <level_requirements level="6"><requirement name="PlayerLevel" operation="GTE" value="16" desc_key="reqGenericPoints02"/></level_requirements>
-            <level_requirements level="7"><requirement name="PlayerLevel" operation="GTE" value="19" desc_key="reqGenericPoints02"/></level_requirements>
-            <level_requirements level="8"><requirement name="PlayerLevel" operation="GTE" value="22" desc_key="reqGenericPoints02"/></level_requirements>
-            <level_requirements level="9"><requirement name="PlayerLevel" operation="GTE" value="25" desc_key="reqGenericPoints03"/></level_requirements>
-            <level_requirements level="10"><requirement name="PlayerLevel" operation="GTE" value="30" desc_key="reqGenericPoints03"/></level_requirements>
+            <level_requirements level="2"><requirement name="PlayerLevel" operation="GTE" value="2" desc_key="reqGenericPoints01"/></level_requirements>
+            <level_requirements level="3"><requirement name="PlayerLevel" operation="GTE" value="4" desc_key="reqGenericPoints01"/></level_requirements>
+            <level_requirements level="4"><requirement name="PlayerLevel" operation="GTE" value="6" desc_key="reqGenericPoints01"/></level_requirements>
+            <level_requirements level="5"><requirement name="PlayerLevel" operation="GTE" value="8" desc_key="reqGenericPoints01"/></level_requirements>
+            <level_requirements level="6"><requirement name="PlayerLevel" operation="GTE" value="11" desc_key="reqGenericPoints02"/></level_requirements>
+            <level_requirements level="7"><requirement name="PlayerLevel" operation="GTE" value="14" desc_key="reqGenericPoints02"/></level_requirements>
+            <level_requirements level="8"><requirement name="PlayerLevel" operation="GTE" value="18" desc_key="reqGenericPoints02"/></level_requirements>
+            <level_requirements level="9"><requirement name="PlayerLevel" operation="GTE" value="22" desc_key="reqGenericPoints03"/></level_requirements>
+            <level_requirements level="10"><requirement name="PlayerLevel" operation="GTE" value="26" desc_key="reqGenericPoints03"/></level_requirements>
+
+            <!-- Sets the crafting level tiers that -->
+            <effect_group>
+                <passive_effect name="CraftingTier" operation="base_add" level="2,10" value="1,5" tags="Hamon"/>
+                <passive_effect name="RecipeTagUnlocked" operation="base_set" level="1,10" value="1" tags="Hamon Training Wraps"/>
+                <passive_effect name="RecipeTagUnlocked" operation="base_set" level="1,10" value="1" tags="Hamon Metal Silver Drivers"/>
+		    </effect_group>
             
             <effect_group>
                 <requirement name="HoldingItemHasTags" tags="attHamon"/>
@@ -242,16 +249,24 @@
             </effect_group>
 
             <effect_group>
-                <effect_description level="1" desc_key="attHamonRank1Desc" long_desc_key="Your fist strikes deal 10 points of Hamon damage to Zombies and 8 points of damage to living animals."/>
-                <effect_description level="2" desc_key="attHamonRank2Desc" long_desc_key="Your fist strikes deal 15 points of Hamon damage to Zombies and 12 points of damage to living animals."/>
-                <effect_description level="3" desc_key="attHamonRank3Desc" long_desc_key="Your fist strikes deal 20 points of Hamon damage to Zombies and 15 points of damage to living animals."/>
-                <effect_description level="4" desc_key="attHamonRank4Desc" long_desc_key="Your fist strikes deal 25 points of Hamon damage to Zombies and 20 points of damage to living animals."/>
-                <effect_description level="5" desc_key="attHamonRank5Desc" long_desc_key="Your fist strikes deal 40 points of Hamon damage to Zombies and 30 points of damage to living animals."/>
-                <effect_description level="6" desc_key="attHamonRank6Desc" long_desc_key="Your fist strikes deal 55 points of Hamon damage to Zombies and 40 points of damage to living animals."/>
-                <effect_description level="7" desc_key="attHamonRank7Desc" long_desc_key="Your fist strikes deal 75 points of Hamon damage to Zombies and 55 points of damage to living animals."/>
-                <effect_description level="8" desc_key="attHamonRank8Desc" long_desc_key="Your fist strikes deal 95 points of Hamon damage to Zombies and 70 points of damage to living animals."/>
-                <effect_description level="9" desc_key="attHamonRank9Desc" long_desc_key="Your fist strikes deal 120 points of Hamon damage to Zombies and 90 points of damage to living animals."/>
-                <effect_description level="10" desc_key="attHamonRank10Desc" long_desc_key="Your fist strikes deal 150 points of Hamon damage to Zombies and 100 points of damage to living animals."/>
+                <requirement name="HoldingItemHasTags" tags="attHamon"/>
+                <requirement name="ProgressionLevel" progression_name="Hamon" operation="GTE" value="1"/>
+                <requirement name="NotHasBuff" buff="buffHamonSquats"/>
+                <requirement name="NotHasBuff" buff="buffHamonBarrage"/>
+                    <triggered_effect trigger="onSelfStand" action="AddBuff" buff="buffHamonSquats"/>
+            </effect_group>
+
+            <effect_group>
+                <effect_description level="1" desc_key="attHamonRank1Desc" long_desc_key="Your fist strikes deal 10 points of Hamon damage to Zombies and 8 points of damage to living animals. When you perform 37 squats, you gain the maximum stat boost of all combo perks."/>
+                <effect_description level="2" desc_key="attHamonRank2Desc" long_desc_key="Your fist strikes deal 15 points of Hamon damage to Zombies and 12 points of damage to living animals. When you perform 34 squats, you gain the maximum stat boost of all combo perks."/>
+                <effect_description level="3" desc_key="attHamonRank3Desc" long_desc_key="Your fist strikes deal 20 points of Hamon damage to Zombies and 15 points of damage to living animals. When you perform 31 squats, you gain the maximum stat boost of all combo perks."/>
+                <effect_description level="4" desc_key="attHamonRank4Desc" long_desc_key="Your fist strikes deal 25 points of Hamon damage to Zombies and 20 points of damage to living animals. When you perform 28 squats, you gain the maximum stat boost of all combo perks."/>
+                <effect_description level="5" desc_key="attHamonRank5Desc" long_desc_key="Your fist strikes deal 40 points of Hamon damage to Zombies and 30 points of damage to living animals. When you perform 25 squats, you gain the maximum stat boost of all combo perks."/>
+                <effect_description level="6" desc_key="attHamonRank6Desc" long_desc_key="Your fist strikes deal 55 points of Hamon damage to Zombies and 40 points of damage to living animals. When you perform 22 squats, you gain the maximum stat boost of all combo perks."/>
+                <effect_description level="7" desc_key="attHamonRank7Desc" long_desc_key="Your fist strikes deal 75 points of Hamon damage to Zombies and 55 points of damage to living animals. When you perform 19 squats, you gain the maximum stat boost of all combo perks."/>
+                <effect_description level="8" desc_key="attHamonRank8Desc" long_desc_key="Your fist strikes deal 95 points of Hamon damage to Zombies and 70 points of damage to living animals. When you perform 16 squats, you gain the maximum stat boost of all combo perks."/>
+                <effect_description level="9" desc_key="attHamonRank9Desc" long_desc_key="Your fist strikes deal 120 points of Hamon damage to Zombies and 90 points of damage to living animals. When you perform 13 squats, you gain the maximum stat boost of all combo perks."/>
+                <effect_description level="10" desc_key="attHamonRank10Desc" long_desc_key="Your fist strikes deal 150 points of Hamon damage to Zombies and 100 points of damage to living animals. When you perform 10 squats, you gain the maximum stat boost of all combo perks."/>
             </effect_group>
         </attribute>
     </insertAfter>
@@ -464,7 +479,7 @@
             </effect_group>
         </perk>
 
-        <perk name="perkHamonSunlightYellowOverdrive" parent="skillHamonCombat" name_key="Hamon Sunlight Yellow Overdrive" desc_key="Hamon Sunlight Yellow Overdrive allows the user to draw energy from a single focused breath to strike with the strength of the Sun. To use Hamon Overdrive, crouch and punch while your combo is greater than 1 to deal bonus damage, with increasing damage from 5 to 9 and instant death at 10 or greater." icon="ui_game_symbol_hot">
+        <perk name="perkHamonSunlightYellowOverdrive" parent="skillHamonCombat" name_key="Hamon Sunlight Yellow Overdrive" desc_key="Hamon Sunlight Yellow Overdrive allows the user to draw energy from a single focused breath to strike with the strength of the Sun. To use Hamon Overdrive, crouch and punch while your combo is greater than 1 to deal bonus damage. If your combo is at least 5, your punch will instantly kill the enemy. " icon="ui_game_symbol_hot">
             <level_requirements level="1"><requirement name="ProgressionLevel" progression_name="Hamon" operation="GTE" value="1" desc_key="Requires Hamon Level 1"/></level_requirements>
             <level_requirements level="2"><requirement name="ProgressionLevel" progression_name="Hamon" operation="GTE" value="3" desc_key="Requires Hamon Level 3"/></level_requirements>
             <level_requirements level="3"><requirement name="ProgressionLevel" progression_name="Hamon" operation="GTE" value="5" desc_key="Requires Hamon Level 5"/></level_requirements>
@@ -554,8 +569,12 @@
                 <requirement name="HitLocation" body_parts="Torso"/>
                 <requirement name="NotHasBuff" target="other" buff="buffHamonForcedBreathingRecovery"/>
                 <requirement name="NotHasBuff" target="other" buff="buffHamonForcedBreathingRecoveryCooldown"/>
-                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="AddBuff" target="other" buff="buffHamonForcedBreathingRecovery"/>
-                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="AddBuff" target="other" buff="buffHamonForcedBreathingRecovery"/>
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="AddBuff" target="other" buff="buffHamonForcedBreathingRecovery">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonForcedBreathing" operation="Equals" value="1"/>
+                    </triggered_effect>
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="AddBuff" target="other" buff="buffHamonForcedBreathingRecovery">
+                        <requirement name="ProgressionLevel" progression_name="perkHamonForcedBreathing" operation="Equals" value="1"/>
+                    </triggered_effect>
 
                 <effect_description level="1" desc_key="perkHamonForcedBreathingRank1Desc" long_desc_key="You can now heal your friends by punching them! But be aware, if your friend is near death you may kill them before they have time to heal."/>
             </effect_group>

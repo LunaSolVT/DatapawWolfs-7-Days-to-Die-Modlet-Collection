@@ -8,13 +8,19 @@
     <insertAfter xpath="/buffs/buff[@name='buffInjuryKnockdown01']">
         <buff name="buffHamonBarrage" icon="ui_game_symbol_boxer" icon_color="0,0,130" description_key="buffHamonBarrage01Desc">
             <stack_type value="replace"/>
-            <duration value="3"/>
+            <duration value="4"/>
+            <update_rate value="0.3"/>
             <display_value value=".hamonBarrageCombo"/><display_value_key value="COMBO: {0}"/>
-
+            
             <!-- Combo initialization -->
             <effect_group>
-                <!-- Begin combo at one - starting at 0 feels unusual -->
-                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageCombo" operation="set" value="1"/>
+                <!-- Begin combo at 1 if zombie has been punched, otherwise begin at 0 if earned by squatting -->
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageCombo" operation="set" value="1">
+                    <requirement name="CVarCompare" cvar=".hamonBarrageStartMaxed" operation="Equals" value="0"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageCombo" operation="set" value="0">
+                    <requirement name="CVarCompare" cvar=".hamonBarrageStartMaxed" operation="Equals" value="1"/>
+                </triggered_effect>
             </effect_group>
             
             <!-- Hamon Barrage -->
@@ -41,6 +47,11 @@
                     <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageIncrement" operation="set" value="@.hamonBarrageMaximum"/>
                     <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageIncrement" operation="divide" value="5"/>                
 
+                    <!-- If the Start Maxed flag is set, we want to immediately set the CVar for this group to max -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageSpeed" operation="set" value="@.hamonBarrageMaximum">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageStartMaxed" operation="Equals" value="1"/>
+                    </triggered_effect>
+
                     <!-- Increment the Hamon Barrage Speed -->
                     <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonBarrageSpeed" operation="add" value="@.hamonBarrageIncrement"/>
 
@@ -48,7 +59,7 @@
                     <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonBarrageSpeed" operation="set" value="@.hamonBarrageMaximum">
                         <requirement name="CVarCompare" cvar=".hamonBarrageSpeed" operation="GT" value="@.hamonBarrageMaximum"/>
                     </triggered_effect>
-                    
+
                     <!-- DEBUG -->
                     <triggered_effect trigger="onSelfBuffStack" action="CVarLogValue" cvar=".hamonBarrageSpeed"/>
 
@@ -79,6 +90,11 @@
                     <!-- Set Hamon Barage Release buff resist increment - maxmimum/5 - which means that it will take 5 strikes to meet the maximum -->
                     <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBuffResistIncrement" operation="set" value="@.hamonBuffResistMaximum"/>
                     <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBuffResistIncrement" operation="divide" value="5"/>    
+
+                    <!-- If the Start Maxed flag is set, we want to immediately set the CVar for this group to max -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBuffResist" operation="set" value="@.hamonBuffResistMaximum">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageStartMaxed" operation="Equals" value="1"/>
+                    </triggered_effect>
 
                     <!-- Increment the Hamon Breath Release resistance -->
                     <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonBuffResist" operation="add" value="@.hamonBuffResistIncrement"/>
@@ -117,7 +133,12 @@
 
                     <!-- Set Hamon Rapid Breathing stamina usage increment - maxmimum/5 - which means that it will take 5 strikes to meet the maximum -->
                     <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingIncrement" operation="set" value="@.hamonRapidBreathingMaximum"/>
-                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingIncrement" operation="divide" value="5"/>    
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingIncrement" operation="divide" value="5"/>
+
+                    <!-- If the Start Maxed flag is set, we want to immediately set the CVar for this group to max -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathing" operation="set" value="@.hamonRapidBreathingMaximum">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageStartMaxed" operation="Equals" value="1"/>
+                    </triggered_effect>
 
                     <!-- Increment the Hamon Rapid Breathing stamina usage reduction -->
                     <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonRapidBreathing" operation="add" value="@.hamonRapidBreathingIncrement"/>
@@ -156,7 +177,12 @@
 
                     <!-- Set Hamon Rapid Breathing health regen increment - maxmimum/5 - which means that it will take 5 strikes to meet the maximum -->
                     <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegenIncrement" operation="set" value="@.hamonRapidBreathingHealthRegenMaximum"/>
-                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegenIncrement" operation="divide" value="5"/>    
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegenIncrement" operation="divide" value="5"/>
+
+                    <!-- If the Start Maxed flag is set, we want to immediately set the CVar for this group to max -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegen" operation="set" value="@.hamonRapidBreathingHealthRegenMaximum">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageStartMaxed" operation="Equals" value="1"/>
+                    </triggered_effect>
 
                     <!-- Increment the Hamon Rapid Breathing health regen increase -->
                     <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonRapidBreathingHealthRegen" operation="add" value="@.hamonRapidBreathingHealthRegenIncrement"/>
@@ -195,7 +221,12 @@
 
                     <!-- Set Hamon Zoom Punch Entity Range increment - maxmimum/5 - which means that it will take 5 strikes to meet the maximum -->
                     <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchIncrement" operation="set" value="@.hamonZoomPunchMaximum"/>
-                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchIncrement" operation="divide" value="5"/>    
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchIncrement" operation="divide" value="5"/>
+
+                    <!-- If the Start Maxed flag is set, we want to immediately set the CVar for this group to max -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunch" operation="set" value="@.hamonZoomPunchMaximum">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageStartMaxed" operation="Equals" value="1"/>
+                    </triggered_effect>
 
                     <!-- Increment the Hamon Zoom Punch Entity Range -->
                     <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonZoomPunch" operation="add" value="@.hamonZoomPunchIncrement"/>
@@ -235,6 +266,11 @@
                     <!-- Set Hamon Zoom Punch Block Range increment - maxmimum/5 - which means that it will take 5 strikes to meet the maximum -->
                     <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchBlockIncrement" operation="set" value="@.hamonZoomPunchBlockMaximum"/>
                     <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchBlockIncrement" operation="divide" value="5"/>    
+
+                    <!-- If the Start Maxed flag is set, we want to immediately set the CVar for this group to max -->
+                    <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonZoomPunchBlock" operation="set" value="@.hamonZoomPunchBlockMaximum">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageStartMaxed" operation="Equals" value="1"/>
+                    </triggered_effect>
 
                     <!-- Increment the Hamon Zoom Punch Block Range -->
                     <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonZoomPunchBlock" operation="add" value="@.hamonZoomPunchBlockIncrement"/>
@@ -299,14 +335,128 @@
                     <passive_effect name="BlockRange" operation="base_add" value="@.hamonZoomPunchBlock"/>
 
                     <!-- Increments buff combo counter -->
-                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonBarrageCombo" operation="add" value="1"/>
+                    <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonBarrageCombo" operation="add" value="1">
+                        <requirement name="CVarCompare" cvar=".hamonBuffStackCD" operation="Equals" value="0"/>
+                    </triggered_effect>
                     <!-- <triggered_effect trigger="onSelfBuffStack" action="AddBuff" buff="buffHamonBarrageComboIncrement"/> -->
+            </effect_group>
+
+            <!-- Multiplayer compatibility section-->
+            <!-- Update is used to reset the stack cooldown var back to 0 so it can be reapplied-->
+            <!-- Stack is used to set the stack cooldown var to 1 so we cannot stack until the next Update -->
+            <!-- Start is used to initialize the CVar to 1 because we don't want to increment the combo when the player has only struck once -->
+            <effect_group>
+                <triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar=".hamonBuffStackCD" operation="set" value="0"/>
+                <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonBuffStackCD" operation="set" value="1"/>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBuffStackCD" operation="set" value="1"/>
+            </effect_group>
+
+            <!-- In place for the Squat buff effects -->
+            <effect_group>
+                <!-- If the Start Maxed flag is set, we want to immediately set it back to 0 -->
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonBarrageStartMaxed" operation="set" value="0">
+                    <requirement name="CVarCompare" cvar=".hamonBarrageStartMaxed" operation="Equals" value="1"/>
+                </triggered_effect>
             </effect_group>
 
             <!-- DEBUG -->
             <effect_group>
                 <triggered_effect trigger="onSelfPrimaryActionRayHit" action="CVarLogValue" cvar=".hamonBarrageCombo"/>
                 <triggered_effect trigger="onSelfSecondaryActionRayHit" action="CVarLogValue" cvar=".hamonBarrageCombo"/>
+            </effect_group>
+        </buff>
+
+        <buff name="buffHamonSquats" icon="ui_game_symbol_pack_mule" icon_color="0,0,130">
+            <stack_type value="replace"/>
+            <duration value=".5"/>
+            <display_value value=".hamonSquatsCount"/><display_value_key value="SQUATS: {0}"/>
+
+            <!--  -->
+            <effect_group>
+                <!-- Set squat requirement per level in hamon -->
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonSquatsStart" operation="set" value="37">
+                    <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="1"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonSquatsStart" operation="set" value="34">
+                    <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="2"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonSquatsStart" operation="set" value="31">
+                    <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="3"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonSquatsStart" operation="set" value="28">
+                    <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="4"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonSquatsStart" operation="set" value="25">
+                    <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="5"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonSquatsStart" operation="set" value="22">
+                    <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="6"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonSquatsStart" operation="set" value="19">
+                    <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="7"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonSquatsStart" operation="set" value="16">
+                    <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="8"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonSquatsStart" operation="set" value="13">
+                    <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="9"/>
+                </triggered_effect>
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonSquatsStart" operation="set" value="10">
+                    <requirement name="ProgressionLevel" progression_name="Hamon" operation="Equals" value="10"/>
+                </triggered_effect>
+
+                <!-- Set the count of squats to the max -->
+                <triggered_effect trigger="onSelfBuffStart" action="ModifyCVar" cvar=".hamonSquatsCount" operation="set" value="@.hamonSquatsStart"/>
+
+                <!-- When the buff stacks, we can subtract 1 from the current squat count and perform player sound -->
+                <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonSquatsCount" operation="subtract" value="1"/>
+                <triggered_effect trigger="onSelfBuffStack" action="PlaySound" sound="player#powerattack"/>
+                
+                <!-- Remove buff when satisfying conditions of number of squats performed -->
+                <triggered_effect trigger="onSelfBuffStack" action="RemoveBuff" buff="buffHamonSquats">
+                    <requirement name="CVarCompare" cvar=".hamonSquatsCount" operation="LTE" value="0"/>
+                </triggered_effect>
+
+                <!-- Begin Hamon Barrage following removal of buff -->
+                <triggered_effect trigger="onSelfBuffStack" action="AddBuff" buff="buffHamonBarrage">
+                    <requirement name="NotHasBuff" buff="buffHamonBarrage"/>
+                    <requirement name="CVarCompare" cvar=".hamonSquatsCount" operation="LTE" value="0"/>
+                </triggered_effect>
+
+                <!-- Apply stat bonuses following removal of buff -->
+                <triggered_effect trigger="onSelfBuffStack" action="ModifyCVar" cvar=".hamonBarrageStartMaxed" operation="set" value="1">
+                    <requirement name="HasBuff" buff="buffHamonBarrage"/>
+                    <requirement name="CVarCompare" cvar=".hamonSquatsCount" operation="LTE" value="0"/>
+                </triggered_effect>
+
+                <!-- Re-add Squats buff if we stood from a crouching position per Crouch CVar -->
+                <triggered_effect trigger="onSelfStand" action="AddBuff" buff="buffHamonSquats">
+                    <requirement name="CVarCompare" cvar=".hamonSquatsCrouch" operation="Equals" value="1"/>
+                </triggered_effect>
+
+                <!-- Reset crouch CVar back to 0 since we're now standing per the trigger -->
+                <triggered_effect trigger="onSelfStand" action="ModifyCVar" cvar=".hamonSquatsCrouch" operation="set" value="0">
+                    <requirement name="CVarCompare" cvar=".hamonSquatsCrouch" operation="Equals" value="1"/>
+                </triggered_effect>
+
+                <!-- Set crouching CVar to keep track of whether or not the player has crouched -->
+                <triggered_effect trigger="onSelfCrouch" action="ModifyCVar" cvar=".hamonSquatsCrouch" operation="set" value="1"/>
+
+                <!-- Prevent player from moving but only if they have already done 1 full squat -->
+                <passive_effect name="RunSpeed" operation="perc_set" value="0">
+                    <requirement name="CVarCompare" cvar=".hamonSquatsCount" operation="NotEquals" value="@.hamonSquatsStart"/>
+                </passive_effect>
+                <passive_effect name="WalkSpeed" operation="perc_set" value="0">
+                    <requirement name="CVarCompare" cvar=".hamonSquatsCount" operation="NotEquals" value="@.hamonSquatsStart"/>
+                </passive_effect>
+                <passive_effect name="JumpStrength" operation="perc_set" value="0">
+                    <requirement name="CVarCompare" cvar=".hamonSquatsCount" operation="NotEquals" value="@.hamonSquatsStart"/>
+                </passive_effect>
+
+                <!-- Kill buff if damage taken or player performs an action -->
+                <triggered_effect trigger="onOtherDamagedSelf" action="RemoveBuff" buff="buffHamonSquats"/>
+                <triggered_effect trigger="onSelfPrimaryActionStart" action="RemoveBuff" buff="buffHamonSquats"/>
+                <triggered_effect trigger="onSelfSecondaryActionStart" action="RemoveBuff" buff="buffHamonSquats"/>
             </effect_group>
         </buff>
 
@@ -377,6 +527,13 @@
                     <triggered_effect trigger="onSelfPrimaryActionRayHit" action="AddBuff" buff="buffPerkHamonSunlightYellowOverdriveCooldown"/>
                     <triggered_effect trigger="onSelfPrimaryActionRayHit" action="AddBuff" buff="buffHamonBarrageComboReset"/>
 
+                    <!-- Grants experience points to mitigate the loss of experience due to the hamon debuff -->
+                    <triggered_effect trigger="onSelfPrimaryActionRayHit" action="GiveExp" exp="1000">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
+                        <requirement name="EntityTagCompare" target="other" tags="entity"/>
+                        <requirement name="IsAlive" target="other"/>
+                    </triggered_effect>
+
                     <!-- Set cooldown duration value -->
                     <triggered_effect trigger="onSelfPrimaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="50">
                         <requirement name="ProgressionLevel" progression_name="perkHamonSunlightYellowOverdrive" operation="Equals" value="1"/>
@@ -440,6 +597,13 @@
                     <!-- If player lands attack, begin cooldown and combo reset -->
                     <triggered_effect trigger="onSelfSecondaryActionRayHit" action="AddBuff" buff="buffPerkHamonSunlightYellowOverdriveCooldown"/>
                     <triggered_effect trigger="onSelfSecondaryActionRayHit" action="AddBuff" buff="buffHamonBarrageComboReset"/>
+
+                    <!-- Grants experience points to mitigate the loss of experience due to the hamon debuff -->
+                    <triggered_effect trigger="onSelfSecondaryActionRayHit" action="GiveExp" exp="1000">
+                        <requirement name="CVarCompare" cvar=".hamonBarrageCombo" operation="GTE" value="5"/>
+                        <requirement name="EntityTagCompare" target="other" tags="entity"/>
+                        <requirement name="IsAlive" target="other"/>
+                    </triggered_effect>
                     
                     <!-- Set cooldown duration value -->
                     <triggered_effect trigger="onSelfSecondaryActionRayHit" action="ModifyCVar" cvar="cooldownDurationHSYO" operation="set" value="50">

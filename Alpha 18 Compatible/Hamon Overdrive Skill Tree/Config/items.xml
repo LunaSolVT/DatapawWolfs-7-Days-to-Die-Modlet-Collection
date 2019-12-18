@@ -35,16 +35,16 @@
                 <property name="SwingDegrees" value="30"/>
                 <property name="SwingAngle" value="90"/>
             </property>
-
+            
             <effect_group name="hamonLeatherTrainingWraps">
-                <passive_effect name="EntityDamage" operation="base_set" value="8"/>
-                <passive_effect name="BlockDamage" operation="base_set" value="6"/>
+                <passive_effect name="EntityDamage" operation="base_set" value="9"/>
+                <passive_effect name="BlockDamage" operation="base_set" value="5"/>
 
                 <passive_effect name="DamageModifier" operation="perc_add" value="-.5" tags="earth,stone,metal,wood"/>
                 <passive_effect name="HarvestCount" operation="base_add" value="-.75" tags="allHarvest,allToolsHarvest,oreWoodHarvest"/>
 
-                <passive_effect name="AttacksPerMinute" operation="base_set" value="42"/>
-                <passive_effect name="StaminaLoss" operation="base_set" value="10" tags="primary"/>
+                <passive_effect name="AttacksPerMinute" operation="base_set" value="45"/>
+                <passive_effect name="StaminaLoss" operation="base_set" value="9" tags="primary"/>
 
                 <passive_effect name="MaxRange" operation="base_set" value="2.2"/>
                 <passive_effect name="BlockRange" operation="base_set" value="2.2"/>
@@ -52,6 +52,7 @@
                 <passive_effect name="DegradationMax" operation="base_set" value="400,700" tier="1,6"/>
                 <passive_effect name="DegradationPerUse" operation="base_set" value="3,2" tier="1,6"/>
 
+                <!-- Keep this line unless you want to allow additional effects from mods -->
                 <passive_effect name="ModSlots" operation="base_set" value="0"/>
 
                 <triggered_effect trigger="onSelfEquipStop" action="RemovePart" part="LeftKnuckle"/>
@@ -84,11 +85,11 @@
             </effect_group>
 
             <effect_group name="Power Attack">
-                <passive_effect name="EntityDamage" operation="perc_add" value=".3" tags="secondary"/>
-                <passive_effect name="BlockDamage" operation="perc_add" value=".3" tags="secondary"/>
+                <passive_effect name="EntityDamage" operation="perc_add" value=".25" tags="secondary"/>
+                <passive_effect name="BlockDamage" operation="perc_add" value=".25" tags="secondary"/>
 
                 <passive_effect name="AttacksPerMinute" operation="perc_add" value="-.2" tags="secondary"/>                
-                <passive_effect name="StaminaLoss" operation="base_add" value="10" tags="secondary"/>
+                <passive_effect name="StaminaLoss" operation="base_add" value="7" tags="secondary"/>
             </effect_group>
         </item>
 
@@ -124,21 +125,22 @@
             </property>
 
             <effect_group name="hamonMetalSilverDrivers">
-                <passive_effect name="EntityDamage" operation="base_set" value="16"/>
-                <passive_effect name="BlockDamage" operation="base_set" value="10"/>
+                <passive_effect name="EntityDamage" operation="base_set" value="12"/>
+                <passive_effect name="BlockDamage" operation="base_set" value="9"/>
 
                 <passive_effect name="DamageModifier" operation="perc_add" value="-.5" tags="earth,stone,metal,wood"/>
                 <passive_effect name="HarvestCount" operation="base_add" value="-.75" tags="allHarvest,allToolsHarvest,oreWoodHarvest"/>
 
                 <passive_effect name="AttacksPerMinute" operation="base_set" value="50"/>
-                <passive_effect name="StaminaLoss" operation="base_set" value="9" tags="primary"/>
+                <passive_effect name="StaminaLoss" operation="base_set" value="8" tags="primary"/>
 
                 <passive_effect name="MaxRange" operation="base_set" value="2.2"/>
                 <passive_effect name="BlockRange" operation="base_set" value="2.2"/>
 
-                <passive_effect name="DegradationMax" operation="base_set" value="600,800" tier="1,6"/>
+                <passive_effect name="DegradationMax" operation="base_set" value="800,1000" tier="1,6"/>
                 <passive_effect name="DegradationPerUse" operation="base_set" value="3,2" tier="1,6"/>
 
+                <!-- Keep this line unless you want to allow additional effects from mods -->
                 <passive_effect name="ModSlots" operation="base_set" value="0"/>
 
                 <triggered_effect trigger="onSelfEquipStop" action="RemovePart" part="LeftKnuckle"/>
@@ -171,11 +173,11 @@
             </effect_group>
 
             <effect_group name="Power Attack">
-                <passive_effect name="EntityDamage" operation="perc_add" value=".3" tags="secondary"/>
-                <passive_effect name="BlockDamage" operation="perc_add" value=".3" tags="secondary"/>
+                <passive_effect name="EntityDamage" operation="perc_add" value=".25" tags="secondary"/>
+                <passive_effect name="BlockDamage" operation="perc_add" value=".25" tags="secondary"/>
 
                 <passive_effect name="AttacksPerMinute" operation="perc_add" value="-.2" tags="secondary"/>
-                <passive_effect name="StaminaLoss" operation="base_add" value="9" tags="secondary"/>
+                <passive_effect name="StaminaLoss" operation="base_add" value="6" tags="secondary"/>
             </effect_group>
         </item>        
     </insertAfter>

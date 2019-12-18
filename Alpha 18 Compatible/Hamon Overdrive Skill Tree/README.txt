@@ -3,8 +3,8 @@ Hello there wanderer,
 In order to install this mod, please create a "Mods" fold where 7 Days to Die's *.exe can be located, which is often in:
 C:\Program Files (x86)\Steam\steamapps\common\7 Days To Die\
 
-You should then copy this folder "Berserk Dragonslayer" into the mods folder, which should allow you to navigate here:
-C:\Program Files (x86)\Steam\steamapps\common\7 Days To Die\Mods\Berserk Dragonslayer
+You should then copy this folder "Hamon Overdrive Skill Tree" into the mods folder, which should allow you to navigate here:
+C:\Program Files (x86)\Steam\steamapps\common\7 Days To Die\Mods\Hamon Overdrive Skill Tree
 
 This mod has been tested with multiplayer and should function as expected.
 

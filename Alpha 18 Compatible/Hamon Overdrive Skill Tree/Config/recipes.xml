@@ -1,14 +1,12 @@
 <configs>
     <insertAfter xpath="/recipes/recipe[@name='meleeKnucklesLeather']">
-        <recipe name="Hamon Training Wraps" count="1" tags="hamon">
+        <recipe name="Hamon Training Wraps" count="1" tags="learnable,Hamon">
             <ingredient name="resourceScrapIron" count="4"/>
 	        <ingredient name="resourceLeather" count="2"/>
             <ingredient name="resourceCloth" count="2"/>
         </recipe>
-    </insertAfter>
-
-    <insertAfter xpath="/recipes/recipe[@name='meleeKnucklesLeather']">
-        <recipe name="Hamon Metal Silver Drivers" count="1" tags="hamon">
+        
+        <recipe name="Hamon Metal Silver Drivers" count="1" tags="learnable,Hamon">
             <ingredient name="resourceForgedIron" count="5"/>
             <ingredient name="resourceRepairKit" count="1"/>
         </recipe>
