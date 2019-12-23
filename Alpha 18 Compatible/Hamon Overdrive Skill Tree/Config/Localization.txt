@@ -1,4 +1,6 @@
 ﻿Key,Source,Context,Changes,English,French,German,Klingon,Spanish,Polish
+hamonTrainingWrapsDesc,items,Melee,,Used primarily as a Hamon resistance-training tool by the ancient Hamon tribe, this wrap allows the user to transfer energy on contact to any strip around the fist while keeping the user's hand safe from contaminants.\n\nRepair with Leather.,,,,,,
+hamonMetalSilverDriversDesc,items,Melee,,A deadly mixed physical and Hamon-conducting weapon. Its form heightens the user's maximum physical output and focuses Hamon energy into the enemy along a thinner surface than the wrap.\n\nRepair with a Repair Tool.,,,,,,,
 attHamonRank1Desc,attributes,Attribute,New,Beginner,,,,,
 attHamonRank2Desc,attributes,Attribute,New,Hobbyist,,,,,
 attHamonRank3Desc,attributes,Attribute,New,Student,,,,,

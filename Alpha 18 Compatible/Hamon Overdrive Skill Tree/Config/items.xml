@@ -12,6 +12,7 @@
             <property name="Weight" value="1"/>
             <property name="RepairTools" value="resourceLeather"/>
             <property name="UnlockedBy" value="Hamon"/>
+            <property name="DescriptionKey" value="hamonTrainingWrapsDesc"/>
             <property class="Action0">
                 <property name="Class" value="DynamicMelee"/>
                 <property name="Sphere" value=".15"/>
@@ -27,6 +28,7 @@
             <property class="Action1">
                 <property name="Class" value="DynamicMelee"/>
                 <property name="Sphere" value=".15"/>
+                <property name="Damage_type" value="Bashing"/>
                 <property name="UsePowerAttackAnimation" value="true"/>
 
                 <property name="UseGrazingHits" value="true"/>
@@ -99,6 +101,7 @@
             <property name="Tags" value="weapon,canHaveCosmetic,attHamon,perkHamonRapidBreathing,perkHamonBarrage,perkHamonBurst,perkHamonSunlightYellowOverdrive,perkHamonForcedBreathing,perkHamonStoneGreyOverdrive,perkHamonIronBlackOverdrive,perkHamonAutumnGoldOverdrive,perkHamonEarthGreenOverdrive"/>
             <property name="RepairTools" value="resourceRepairKit"/>
             <property name="UnlockedBy" value="Hamon"/>
+            <property name="DescriptionKey" value="hamonMetalSilverDriversDesc"/>
             <property class="Action0">
                 <property name="Class" value="DynamicMelee"/>
                 <property name="Sphere" value=".15"/>

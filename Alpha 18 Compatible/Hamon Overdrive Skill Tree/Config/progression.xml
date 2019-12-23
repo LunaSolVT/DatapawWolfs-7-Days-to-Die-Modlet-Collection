@@ -48,12 +48,14 @@
                         <requirement name="CVarCompare" cvar=".hasStruckBlock" operation="Equals" value="1"/>
                         <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="0"/>
                     </triggered_effect>
-                    <!-- When player has solely "struck" a block with a graze -->
+                    <!-- When player has solely "struck" a block with a graze - currently "object" appears for Zombie bodies briefly -->
+                    <!-- The following would normally be used to register if only a block has been struck and then kill the combo, but there is a bug that randomly stops registering zombie hitboxes
                     <triggered_effect trigger="onSelfPrimaryActionEnd" action="RemoveBuff" buff="buffHamonBarrage">
                         <requirement name="CVarCompare" cvar=".hasStruckObject" operation="Equals" value="1"/>
                         <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="0"/>
                         <requirement name="CVarCompare" cvar=".hasStruckBlock" operation="Equals" value="0"/>
                     </triggered_effect>
+                    -->
                     <triggered_effect trigger="onSelfPrimaryActionEnd" action="ModifyCVar" cvar=".hamonBarrageFistCurrent" operation="set" value="-1">
                         <requirement name="CVarCompare" cvar=".hasStruckObject" operation="Equals" value="1"/>
                         <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="0"/>
@@ -95,11 +97,13 @@
                         <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="0"/>
                     </triggered_effect>
                     <!-- When player has solely "struck" a block with a graze -->
+                    <!-- The following would normally be used to register if only a block has been struck and then kill the combo, but there is a bug that randomly stops registering zombie hitboxes
                     <triggered_effect trigger="onSelfSecondaryActionEnd" action="RemoveBuff" buff="buffHamonBarrage">
                         <requirement name="CVarCompare" cvar=".hasStruckObject" operation="Equals" value="1"/>
                         <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="0"/>
                         <requirement name="CVarCompare" cvar=".hasStruckBlock" operation="Equals" value="0"/>
                     </triggered_effect>
+                    -->
                     <triggered_effect trigger="onSelfSecondaryActionEnd" action="ModifyCVar" cvar=".hamonBarrageFistCurrent" operation="set" value="-1">
                         <requirement name="CVarCompare" cvar=".hasStruckObject" operation="Equals" value="1"/>
                         <requirement name="CVarCompare" cvar=".hasStruckEntity" operation="Equals" value="0"/>
@@ -348,9 +352,9 @@
     </insertAfter>
 
     <insertAfter xpath="/progression/skills/skill[@name='skillCraftsmanship']">
-        <skill name="skillHamonUtilityPerks" parent="Hamon" name_key="Utility Perks" desc_key="" icon="ui_game_symbol_star"><effect_group/></skill>
-        <skill name="skillHamonSpecial" parent="Hamon" name_key="Special Perks" desc_key="" icon="ui_game_symbol_skull"><effect_group/></skill>
-        <skill name="skillHamonCombo" parent="Hamon" name_key="Barrage Combo Perks" desc_key="" icon="ui_game_symbol_boxer"><effect_group/></skill>
+        <skill name="skillHamonUtilityPerks" parent="Hamon" name_key="Hamon Utility Perks" desc_key="" icon="ui_game_symbol_star"><effect_group/></skill>
+        <skill name="skillHamonSpecial" parent="Hamon" name_key="Hamon Special Perks" desc_key="" icon="ui_game_symbol_skull"><effect_group/></skill>
+        <skill name="skillHamonCombo" parent="Hamon" name_key="Hamon Combo Perks" desc_key="" icon="ui_game_symbol_boxer"><effect_group/></skill>
     </insertAfter>
 
     <insertAfter xpath="/progression/perks/perk[@name='perkYeahScience']">
